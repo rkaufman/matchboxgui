@@ -11,14 +11,16 @@ export default function authentication(state = initialState, action) {
         user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
-      return {
+      localStorage.setItem('user', {loggedIn:true, user:action.user})
+      return Object.assign(state,{
         loggedIn: true,
         user: action.user
-      };
+      });
     case userConstants.LOGIN_FAILURE:
       return {};
     case userConstants.LOGOUT:
-      return {};
+      localStorage.removeItem('user');
+      return {loggedIn:false, user:{}};
     default:
       return state
   }

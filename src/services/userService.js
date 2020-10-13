@@ -12,11 +12,11 @@ export const userService = {
 };
 export default userService;
 
-function login(username, password) {
+function login(user) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify(user)
     };
 
     return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)

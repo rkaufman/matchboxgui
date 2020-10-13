@@ -1,5 +1,5 @@
 // array in local storage for registered users
-let users = JSON.parse(localStorage.getItem('users')) || [];
+let users = JSON.parse(localStorage.getItem('users')) || [{username:'roby', password: 'secret123'}];
     
 export function configureFakeBackend() {
     let realFetch = window.fetch;

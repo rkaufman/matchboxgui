@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import { userActions } from '../actions';
-
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
@@ -20,6 +18,7 @@ class LoginPage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+    
 
     handleChange(e) {
         const { name, value } = e.target;
@@ -32,7 +31,7 @@ class LoginPage extends React.Component {
         this.setState({ submitted: true });
         const { username, password } = this.state;
         if (username && password) {
-            this.props.login(username, password);
+            this.props.login({username, password});
         }
     }
 
@@ -51,7 +50,7 @@ class LoginPage extends React.Component {
                         }
                     </div>
                     <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="text">Password</label>
                         <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
                         {submitted && !password &&
                             <div className="help-block">Password is required</div>

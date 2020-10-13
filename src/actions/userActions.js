@@ -1,6 +1,7 @@
 import * as types from "./actionTypes";
 import userService from "../services/userService";
 
+
 export const userActions = {
     logout,
     login,
@@ -39,6 +40,7 @@ export function login(user) {
     return function(dispatch) {
         return userService.login(user).then(u => {
             dispatch(loginSuccess(u));
+
         }).catch(err => {
             dispatch(loginFailure(err));
         });
