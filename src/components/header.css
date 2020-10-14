@@ -1,0 +1,21 @@
+.header{
+    background-color: black !important;
+    color: white !important;
+    font-size: x-large;
+    height: 5em;
+    text-align: center;
+}
+.header img{
+    float: left;
+    margin: 5px;
+}
+
+.header p{
+    padding-top: 5px;
+    font-size: x-large;
+}
+
+.header .k-button{
+    color: white;
+    background: transparent;
+}

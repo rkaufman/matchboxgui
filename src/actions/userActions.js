@@ -1,5 +1,6 @@
 import * as types from "./actionTypes";
 import userService from "../services/userService";
+import history from '../helpers/history'
 
 
 export const userActions = {
@@ -40,7 +41,7 @@ export function login(user) {
     return function(dispatch) {
         return userService.login(user).then(u => {
             dispatch(loginSuccess(u));
-
+            history.push('/')
         }).catch(err => {
             dispatch(loginFailure(err));
         });

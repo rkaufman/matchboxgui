@@ -1,8 +1,36 @@
-.left-panel{
+.login{
+    color: white;
+    background-color: darkgray;
+}
+.login-left-panel{
     background-color: black;
     text-align: center;
 }
 
-.right-panel{
+.login-left-panel > div > p{
+    font-size: 27.5px;
+}
+
+.login-right-panel{
     background-color: darkgray;
+    text-align: center;
+}
+
+.login-btn{
+    width: 100%;
+    height: 27.5px;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+}
+
+.login-tygart-logo{
+    height: 27.5px;
+}
+
+input[type="text"], textarea{
+    background-color: black;
+}
+input[type="password"], textarea{
+    background-color: black;
 }

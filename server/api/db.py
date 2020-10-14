@@ -11,6 +11,7 @@ from .control_type import ControlType
 from .status import Status
 from .log_message import LogMessage
 import datetime
+from .user import User
 
 DATABASE = os.path.join(os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))), 'mxedgesql.db')
 
@@ -26,7 +27,9 @@ def get_user_by_id(user_id):
     user = db.execute(
             'SELECT * FROM users WHERE id = ?', (user_id,)
         ).fetchone()
-    return user
+    u = User(int(user['id']))
+    u.username = str(user['username'])
+    return u
 
 
 def get_user(username):
@@ -34,8 +37,19 @@ def get_user(username):
     user = db.execute(
         'SELECT * FROM users WHERE username = ?', (username,)
     ).fetchone()
-    return {"id": int(user['id']), "username": str(user['username']), "password": str(user['pwd'])}
-
+    u = User(int(user['id']))
+    u.username = str(user['username'])
+    u.password = str(user['pwd'])
+    return u
+def get_users():
+    db = get_db()
+    rows = db.execute(
+        'SELECT * FROM users;'
+    ).fetchall()
+    result = []
+    for row in rows:
+        result.append({'username': row['username'], 'id': row['id']})
+    return result
 
 def get_db():
     db = sqlite3.connect(
@@ -95,10 +109,16 @@ def add_user(username, password):
     return user_id
 
 def authenticate_user(username, password):
+    print(username)
+    print(password)
     user = get_user(username)
-    if check_password_hash(user['password'], password):
-        return True
+    print(user)
+    if check_password_hash(user.password, password):
+        print('authenticated')
+        user.password = ''
+        return user
     else:
+        print('not authenticated')
         return False
 
 

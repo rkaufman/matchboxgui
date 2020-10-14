@@ -15,7 +15,7 @@ class HomePage extends React.Component {
 
     componentDidMount() {
         this.setState({ 
-            user: JSON.parse(localStorage.getItem('user')),
+            //user: JSON.parse(localStorage.getItem('user')),
             users: { loading: true }
         });
         userService.getAll().then(users => this.setState({ users }));
@@ -33,7 +33,7 @@ class HomePage extends React.Component {
                     <ul>
                         {users.map((user, index) =>
                             <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
+                                {user.username}
                             </li>
                         )}
                     </ul>
