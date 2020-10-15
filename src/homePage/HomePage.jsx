@@ -1,46 +1,43 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {ListView, ListViewHeader, ListViewFooter} from '@progress/kendo-react-listview';
+import StatusRender from '../components/StatusRender';
+import LogRender from '../components/LogRender';
 
-import { userService } from '../services';
+import statuses from '../statusItems.json'
+import './HomePage.css';
+import { Camera } from '../components/Camera';
+import {CameraPlaceHolder} from '../components/CameraPlaceHolder';
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            user: {},
-            users: []
+            logs: [{
+                "status": "info",
+                "text": "this is just info",
+                "date": "2020-07-08 10:12:28"
+            }],
+            cameraStatus: "Disconnected"
         };
     }
-
-    componentDidMount() {
-        this.setState({ 
-            //user: JSON.parse(localStorage.getItem('user')),
-            users: { loading: true }
-        });
-        userService.getAll().then(users => this.setState({ users }));
-    }
-
     render() {
-        const { user, users } = this.state;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h1>Hi {user.firstName}!</h1>
-                <p>You're logged in with React &amp; Basic HTTP Authentication!!</p>
-                <h3>Users from secure api end point:</h3>
-                {users.loading && <em>Loading users...</em>}
-                {users.length &&
-                    <ul>
-                        {users.map((user, index) =>
-                            <li key={user.id}>
-                                {user.username}
-                            </li>
-                        )}
-                    </ul>
-                }
-                <p>
-                    <Link to="/login">Logout</Link>
-                </p>
+            <div className="row full-height">
+                <div className="col-md-2 status-panel full-height">
+                    <ListView data={statuses}
+                        item={StatusRender}
+                        className="lv-status vertical-center"/>
+                </div>
+                <div className="col-md-4 status-panel full-height">
+                    <ListView data={this.state.logs}
+                        item={LogRender}
+                        className="lv-status"
+                        style={{textAlign:'left'}}/>
+                </div>
+                <div className="col-md-6  status-panel full-height">
+                    <CameraPlaceHolder className="camera-placeholder" status={this.state.cameraStatus}/>
+                </div>
             </div>
         );
     }

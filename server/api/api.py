@@ -67,3 +67,6 @@ def users():
         print(e)
         return jsonify({'status': 'fail', 'message': 'Failed to get users'}), 500
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    return jsonify({'status': 'success', 'message': 'logged out'}), 200

@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
 import './Login.css'
@@ -81,9 +82,10 @@ class LoginPage extends React.Component {
     }
 }
 
-function mapState(state) {
+function mapState(state, ownProps) {
     const { loggingIn } = state.authentication;
-    return { loggingIn };
+    return { loggingIn,
+    history: ownProps.history };
 }
 
 const actionCreators = {
@@ -91,5 +93,5 @@ const actionCreators = {
     logout: userActions.logout
 };
 
-const connectedLoginPage = connect(mapState, actionCreators)(LoginPage);
+const connectedLoginPage = withRouter(connect(mapState, actionCreators)(LoginPage));
 export { connectedLoginPage as LoginPage };

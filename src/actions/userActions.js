@@ -2,7 +2,6 @@ import * as types from "./actionTypes";
 import userService from "../services/userService";
 import history from '../helpers/history'
 
-
 export const userActions = {
     logout,
     login,
@@ -10,8 +9,12 @@ export const userActions = {
     usernameBlank
 };
 
-function logout(user) {
+function logoutSuccess(user) {
+    history.push('/')
     return { type: types.LOGOUT, user };
+}
+function logoutFailure(err){
+    return {type: types.LOGOUT_FAILURE, errors: err}
 }
 function loadUsersSuccess(users) {
     return { type: types.LOAD_USERS_SUCCESS, users };
@@ -41,9 +44,18 @@ export function login(user) {
     return function(dispatch) {
         return userService.login(user).then(u => {
             dispatch(loginSuccess(u));
-            history.push('/')
         }).catch(err => {
             dispatch(loginFailure(err));
         });
     };
+}
+
+export function logout(){
+    return (dispatch)=>{
+        return userService.logout().then(u=>{
+            dispatch(logoutSuccess())
+        }).catch(err=>{
+            dispatch(logoutFailure(err))
+        });
+    }
 }

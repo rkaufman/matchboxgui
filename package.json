@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@progress/kendo-react-buttons": "^3.17.0",
+    "@progress/kendo-react-listview": "^3.18.0",
     "@progress/kendo-theme-default": "^4.24.0",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",

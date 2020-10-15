@@ -1,0 +1,20 @@
+[
+    {
+        "icon": "fa fa-video-camera fa-5x",
+        "state": "red",
+        "text": "Camera",
+        "status": "Disconnected"
+    },
+    {
+        "icon": "fa fa-server fa-5x",
+        "state": "green",
+        "text": "MXSERVER",
+        "status": "Connected"
+    },
+    {
+        "icon": "fa fa-user fa-5x",
+        "state": "red",
+        "text": "Detection",
+        "status": "Faces (56)"
+    }
+]

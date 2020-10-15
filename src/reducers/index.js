@@ -3,10 +3,12 @@ import alert from './alertReducer';
 import authentication from './authenticationReducer';
 import register from './registerReducer';
 import users from './usersReducer';
+import {reducer as toastrReducer} from 'react-redux-toastr';
 
 export default combineReducers({
     alert: alert,
     authentication: authentication,
     register: register,
-    users: users
+    users: users,
+    toastr: toastrReducer
 })

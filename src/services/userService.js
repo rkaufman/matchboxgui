@@ -30,8 +30,16 @@ function login(user) {
 }
 
 function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('auth_token');
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader()
+    }
+    return fetch(`${config.apiUrl}/logout`, requestOptions)
+    .then(handleResponse)
+    .then(()=>{
+        // remove user from local storage to log user out
+        localStorage.removeItem('auth_token');
+    })
 }
 
 function getAll() {

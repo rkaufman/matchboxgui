@@ -1,0 +1,96 @@
+.lv-status{
+    background-color: transparent !important;
+    text-align: center;
+}
+.lv-1-status .k-listview-content{
+    background: transparent !important;
+    font-weight: bold;
+}
+
+.status-item-container{
+    background: transparent;
+    margin: 3em 3.5em;
+}
+.status-item-content-wrapper{
+    flex-wrap: wrap;
+    border-radius: 1em !important;
+}
+
+.status-item-content-wrapper i{
+    width: 100%;
+}
+
+.status-item-content-wrapper p{
+    width: 100%;
+}
+
+.status-panel{
+    background-color: #525252;
+    border-right: 1px solid whitesmoke;
+}
+
+.status-indicator{
+    width: 100%;
+}
+
+.status-indicator .circle{
+    height: 1em;
+    width: 1em;
+    float: right;
+    display: inline;
+}
+
+.log-container{
+    margin: .5em;
+    border-radius: .5em;
+    background-color: #707070;
+    color: white;
+    overflow: hidden;
+    max-height: 10em;
+}
+
+.log-status-indicator{
+    margin-left: -15px;
+    height: 100px;
+}
+
+.camera-placeholder{
+    height: 60%;
+    background-color: black;
+    margin: 5em;
+    color: white;
+    position: relative;
+    font-weight: bold;
+}
+
+.camera-placeholder .k-button{
+    border-radius: .5em;
+    height: 4em;
+    width: 20em;
+    color: black;
+}
+
+.camera-placeholder-toolbar{
+    background-color: #3a3a3a !important;
+    border-radius: .5em;
+    height: 5em;
+    margin: 5em !important;
+}
+
+.camera-placeholder-toolbar-icon{
+    background-color: white;
+    border-radius: .3em;
+    height: 2em;
+    width: 2.5em;
+    text-align: center;
+    color: black;
+    margin-left: 1em;
+    padding-top: .2em;
+}
+.camera-placeholder-toolbar .k-button{
+    border-radius: .5em;
+    height: 4em;
+    width: 15em;
+    font-weight: bold;
+    color: black;
+}

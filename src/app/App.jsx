@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import { PrivateRoute, Header } from '../components';
 import { HomePage } from '../homePage';
@@ -17,10 +17,11 @@ class App extends React.Component {
                         <Header/>
                     </div>
                     <div className="row full-height">
-                        <Router>
-                            <Route exact path="/login" component={LoginPage} />
+                        <Switch>
                             <PrivateRoute exact path="/" component={HomePage} loggedIn={this.props.loggedIn}/>
-                        </Router>
+                            <PrivateRoute path="/status" component={HomePage} loggedIn={this.props.loggedIn}/>
+                            <Route exact path="/login" component={LoginPage} />
+                        </Switch>
                     </div>
                 </div>
             );
@@ -28,10 +29,11 @@ class App extends React.Component {
             return (
                 <div className="container mb-container full-height App">
                     <div className="row full-height">
-                        <Router>
+                        <Switch>
                             <Route exact path="/login" component={LoginPage} />
                             <PrivateRoute exact path="/" component={HomePage} loggedIn={this.props.loggedIn}/>
-                        </Router>
+                            <PrivateRoute path="/status" component={HomePage} loggedIn={this.props.loggedIn}/>
+                        </Switch>
                     </div>
                 </div>
             );

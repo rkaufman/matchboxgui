@@ -18,4 +18,10 @@
 .header .k-button{
     color: white;
     background: transparent;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.header .k-button > span{
+    flex: 1 0 100%;
 }
