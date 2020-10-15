@@ -13,7 +13,7 @@
     },
     {
         "icon": "fa fa-user fa-5x",
-        "state": "red",
+        "state": "green",
         "text": "Detection",
         "status": "Faces (56)"
     }

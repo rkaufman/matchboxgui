@@ -17,7 +17,18 @@ class HomePage extends React.Component {
                 "status": "info",
                 "text": "this is just info",
                 "date": "2020-07-08 10:12:28"
-            }],
+            },
+            {
+                "status": "danger",
+                "text": "this is a danger tag meaning something has gone wrong",
+                "date": "2020-10-15 16:13:00"
+            },
+            {
+                "status": "warning",
+                "text": "this is a warning tag meaning something happened that may not be good",
+                "date": "2020-10-15 16:14:00"
+            }
+        ],
             cameraStatus: "Disconnected"
         };
     }
