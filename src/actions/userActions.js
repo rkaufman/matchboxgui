@@ -1,6 +1,6 @@
 import * as types from "./actionTypes";
 import userService from "../services/userService";
-import history from '../helpers/history'
+//import history from '../helpers/history'
 
 export const userActions = {
     logout,
@@ -10,7 +10,6 @@ export const userActions = {
 };
 
 function logoutSuccess(user) {
-    history.push('/')
     return { type: types.LOGOUT, user };
 }
 function logoutFailure(err){

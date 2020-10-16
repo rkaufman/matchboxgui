@@ -1,14 +1,16 @@
 import React from 'react';
-import {ListView, ListViewHeader, ListViewFooter} from '@progress/kendo-react-listview';
+import {ListView} from '@progress/kendo-react-listview';
 import StatusRender from '../components/StatusRender';
 import LogRender from '../components/LogRender';
-
+//import {bindActionCreators} from 'redux';
 import statuses from '../statusItems.json'
 import './HomePage.css';
-import { Camera } from '../components/Camera';
+//import { Camera } from '../components/Camera';
 import {CameraPlaceHolder} from '../components/CameraPlaceHolder';
+//import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 
-class HomePage extends React.Component {
+export class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -34,7 +36,7 @@ class HomePage extends React.Component {
     }
     render() {
         return (
-            <div className="row full-height">
+            <span>
                 <div className="col-md-2 status-panel full-height">
                     <ListView data={statuses}
                         item={StatusRender}
@@ -49,9 +51,15 @@ class HomePage extends React.Component {
                 <div className="col-md-6  status-panel full-height">
                     <CameraPlaceHolder className="camera-placeholder" status={this.state.cameraStatus}/>
                 </div>
-            </div>
+            </span>
         );
     }
 }
 
-export { HomePage };
+const mapStateToProps = (state,ownProps)=>{
+    return {
+        history: ownProps.history
+    }
+}
+
+export default connect(mapStateToProps)(HomePage)

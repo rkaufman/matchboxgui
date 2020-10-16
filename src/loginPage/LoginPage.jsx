@@ -2,14 +2,15 @@ import React from 'react';
 import {withRouter} from 'react-router';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import { bindActionCreators } from "redux";
 import './Login.css'
 
-class LoginPage extends React.Component {
+export class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
         // reset login status
-        this.props.logout();
+        this.props.userActions.logout();
 
         this.state = {
             username: '',
@@ -33,7 +34,7 @@ class LoginPage extends React.Component {
         this.setState({ submitted: true });
         const { username, password } = this.state;
         if (username && password) {
-            this.props.login({username, password});
+            this.props.userActions.login({username, password});
         }
     }
 
@@ -82,16 +83,16 @@ class LoginPage extends React.Component {
     }
 }
 
-function mapState(state, ownProps) {
-    const { loggingIn } = state.authentication;
+function mapStateToProps(state, ownProps) {
+    const { loggingIn, loggedIn } = state.authentication;
     return { loggingIn,
+        loggedIn,
     history: ownProps.history };
 }
+function mapDispatchToProps(dispatch) {
+    return {
+        userActions: bindActionCreators(userActions, dispatch)
+    };
+}
 
-const actionCreators = {
-    login: userActions.login,
-    logout: userActions.logout
-};
-
-const connectedLoginPage = withRouter(connect(mapState, actionCreators)(LoginPage));
-export { connectedLoginPage as LoginPage };
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPage));

@@ -8,6 +8,7 @@
 .header img{
     float: left;
     margin: 5px;
+    height: 3em;
 }
 
 .header p{

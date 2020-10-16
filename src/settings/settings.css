@@ -1,0 +1,31 @@
+.setting-drawer{
+    color: white;
+    background: #525252 !important;
+}
+
+.setting-drawer-item{
+    background-color: #3a3a3a;
+    border-radius: .5em;
+    height: 3.5em;
+    color: white;
+    margin: 9.5px;
+    position: relative;
+    text-align: left;
+}
+
+.setting-drawer-item > span > span{
+    margin-left: 1.5em;
+    margin-top: .7em;
+}
+.setting-drawer-item > span > p{
+    margin-left: 3.5em;
+    margin-top: .5em;
+}
+
+.setting-drawer-item:hover {
+    color: #525252;
+    background-color: white;
+}
+.setting-drawer .k-drawer{
+    background: transparent;
+}

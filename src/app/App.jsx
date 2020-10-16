@@ -1,14 +1,24 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
-
-import { PrivateRoute, Header } from '../components';
-import { HomePage } from '../homePage';
-import { LoginPage } from '../loginPage';
+import Header from '../components/Header';
+import  PrivateRoute from '../components/PrivateRoute';
+import  HomePage from '../homePage/HomePage';
+import LoginPage from '../loginPage/LoginPage';
 import './App.css'
 import '@progress/kendo-theme-default'
+import Account from '../account/Account';
+import Settings from '../settings/Settings';
 
 class App extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+
+        }
+        
+    }
     render() {
         if(this.props.loggedIn){
             return (
@@ -20,7 +30,8 @@ class App extends React.Component {
                         <Switch>
                             <PrivateRoute exact path="/" component={HomePage} loggedIn={this.props.loggedIn}/>
                             <PrivateRoute path="/status" component={HomePage} loggedIn={this.props.loggedIn}/>
-                            <Route exact path="/login" component={LoginPage} />
+                            <PrivateRoute path="/account" component={Account} loggedIn={this.props.loggedIn}/>
+                            <PrivateRoute path="/settings" component={Settings} loggedIn={this.props.loggedIn} />
                         </Switch>
                     </div>
                 </div>
@@ -30,9 +41,11 @@ class App extends React.Component {
                 <div className="container mb-container full-height App">
                     <div className="row full-height">
                         <Switch>
-                            <Route exact path="/login" component={LoginPage} />
                             <PrivateRoute exact path="/" component={HomePage} loggedIn={this.props.loggedIn}/>
                             <PrivateRoute path="/status" component={HomePage} loggedIn={this.props.loggedIn}/>
+                            <PrivateRoute path="/account" component={Account} loggedIn={this.props.loggedIn}/>
+                            <PrivateRoute path="/settings" component={Settings} loggedIn={this.props.loggedIn} />
+                            <Route exact path="/login" component={LoginPage} />
                         </Switch>
                     </div>
                 </div>
@@ -40,10 +53,12 @@ class App extends React.Component {
         }
     }
 }
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state, ownProps)=>{
     const {loggedIn} = state.authentication;
+    
     return{
-        loggedIn
+        loggedIn,
+        history: ownProps.history
     }
 }
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));

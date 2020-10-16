@@ -3,7 +3,7 @@ from flask_cors import CORS
 from .middlewares import login_required
 import time
 import os
-from .db import get_user, add_user, delete_user, get_db, init_db, authenticate_user, get_user_by_id, get_users
+from .db import get_user, add_user, delete_user, get_db, init_db, authenticate_user, get_user_by_id, get_users, get_settings
 import json
 import datetime
 from flask_jwt import JWT, jwt_required
@@ -23,10 +23,6 @@ x = get_db()
 if(x is None):
     init_db()
 
-@app.route("/time", methods=["GET"])
-@jwt_required()
-def get_current_time():
-    return jsonify({"time": time.time()})
 
 def authenticate(username, password):
     print('username')
@@ -42,6 +38,8 @@ def authenticate(username, password):
             'message': 'Try again'
         }
         return jsonify(responseObject), 500
+
+
 
 @app.route('/users', methods=['POST'])
 @jwt_required()
@@ -69,4 +67,19 @@ def users():
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    #TODO: add passed in jwt to blacklist
     return jsonify({'status': 'success', 'message': 'logged out'}), 200
+
+@app.route('/setting', methods=['GET'])
+@jwt_required()
+def get_setting():
+    try:
+        settings = get_settings()
+        ret = []
+        for s in settings:
+            dto = json.dumps(s.__dict__)
+            ret.push(dto)
+        return json.dumps(ret), 200
+    except Exception as ex:
+        print(ex)
+        return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
