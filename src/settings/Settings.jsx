@@ -3,6 +3,7 @@ import {withRouter} from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Drawer, DrawerContent} from '@progress/kendo-react-layout';
+import {settingAction} from '../actions/settingActions'
 import Mxserver from './Mxserver';
 import VideoSettings from './VideoSettings';
 import NetworkConfiguration from './NetworkConfigurationSettings';
@@ -18,6 +19,10 @@ export class Settings extends React.Component{
             selectedId: this.items.findIndex(x=>x.selected==true)
         }
     }
+    componentDidMount() {
+
+    }
+
     items = [
         {text: "MXSERVER", icon:"fa fa-server fa-x3", selected: true, route: "/settings/mxserver"},
         {text: "Video Source", icon:"fa fa-video-camera fa-x3", selected: true, route: "/settings/video"},

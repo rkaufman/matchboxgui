@@ -1,12 +1,11 @@
+import json
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from .middlewares import login_required
-import time
-import os
-from .db import get_user, add_user, delete_user, get_db, init_db, authenticate_user, get_user_by_id, get_users, get_settings
-import json
-import datetime
 from flask_jwt import JWT, jwt_required
+
+from .db import get_user, add_user, get_db, init_db, authenticate_user, get_user_by_id, get_users, get_settings
+
 
 def identity(payload):
     print(payload)
@@ -77,9 +76,9 @@ def get_setting():
         settings = get_settings()
         ret = []
         for s in settings:
-            dto = json.dumps(s.__dict__)
-            ret.push(dto)
-        return json.dumps(ret), 200
+            dto = json.dumps(s, default=lambda s: s.__dict__, indent=4)
+            ret.append(dto)
+        return jsonify(ret), 200
     except Exception as ex:
         print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
