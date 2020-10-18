@@ -1,0 +1,37 @@
+import config from './config';
+import { authHeader } from '../helpers';
+import history from "../helpers/history";
+
+export const settingService = {
+    getAll
+}
+
+function getAll(){
+    let requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${config.apiUrl}/setting`, requestOptions)
+        .then(handleResponse)
+        .then(s=>{
+            return s;
+        })
+}
+function handleResponse(response) {
+    return response.text().then(text => {
+        const data = text && JSON.parse(text);
+        if (!response.ok) {
+            if (response.status === 401) {
+                // auto logout if 401 response returned from api
+                localStorage.removeItem("auth_token");
+                history.push('/login')
+            }
+
+            const error = (data && data.message) || response.statusText;
+            return Promise.reject(error);
+        }
+
+        return data;
+    });
+}
+export default settingService;

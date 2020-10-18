@@ -1,0 +1,4 @@
+export const settingConstants = {
+    GET_SETTINGS_SUCCESS: 'GET_SETTINGS_SUCCESS',
+    GET_SETTINGS_FAILURE: 'GET_SETTINGS_FAILURE'
+}

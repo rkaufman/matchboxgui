@@ -97,6 +97,7 @@ function handleResponse(response) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
+                localStorage.removeItem('auth_token')
                 history.push('/login')
             }
 

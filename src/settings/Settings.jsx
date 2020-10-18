@@ -3,7 +3,8 @@ import {withRouter} from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Drawer, DrawerContent} from '@progress/kendo-react-layout';
-import {settingAction} from '../actions/settingActions'
+import {settingActions} from '../actions/settingActions'
+import { bindActionCreators } from "redux";
 import Mxserver from './Mxserver';
 import VideoSettings from './VideoSettings';
 import NetworkConfiguration from './NetworkConfigurationSettings';
@@ -16,11 +17,11 @@ export class Settings extends React.Component{
         super(props);
         this.state = {
             expanded: true,
-            selectedId: this.items.findIndex(x=>x.selected==true)
+            selectedId: this.items.findIndex(x=>x.selected===true)
         }
     }
     componentDidMount() {
-
+        this.props.settingAction.getSettings();
     }
 
     items = [
@@ -70,8 +71,13 @@ export class Settings extends React.Component{
 
 const mapStateToProps = (state,ownProps)=>{
     return {
+        settings: state.settings,
         history: ownProps.history
     }
 }
-
-export default withRouter(connect(mapStateToProps)(Settings));
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        settingAction: bindActionCreators(settingActions, dispatch)
+    }
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

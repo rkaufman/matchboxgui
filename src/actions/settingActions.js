@@ -1,4 +1,5 @@
 import * as types from './actionTypes';
+import settingService from "../services/settingService";
 
 export const settingActions = {
     getSettings
@@ -9,7 +10,7 @@ const getSettingSuccess = (settings)=>{
 const getSettingFailure = (err)=>{
     return {type: types.GET_SETTINGS_FAILURE, err};
 }
-export const getSettings = ()=>{
+function getSettings(){
     return (dispatch)=>{
         return settingService.getAll().then(s=>{
             dispatch(getSettingSuccess(s));
@@ -18,3 +19,5 @@ export const getSettings = ()=>{
         })
     }
 }
+
+export default settingActions;
