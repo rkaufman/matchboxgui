@@ -25,8 +25,8 @@ def close_db(e=None):
 def get_user_by_id(user_id):
     db = get_db()
     user = db.execute(
-            'SELECT * FROM users WHERE id = ?', (user_id,)
-        ).fetchone()
+        'SELECT * FROM users WHERE id = ?', (user_id,)
+    ).fetchone()
     u = User(int(user['id']))
     u.username = str(user['username'])
     return u
@@ -41,6 +41,8 @@ def get_user(username):
     u.username = str(user['username'])
     u.password = str(user['pwd'])
     return u
+
+
 def get_users():
     db = get_db()
     rows = db.execute(
@@ -50,6 +52,7 @@ def get_users():
     for row in rows:
         result.append({'username': row['username'], 'id': row['id']})
     return result
+
 
 def get_db():
     db = sqlite3.connect(
@@ -62,9 +65,9 @@ def get_db():
 
 def init_db():
     db = sqlite3.connect(
-            DATABASE,
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
+        DATABASE,
+        detect_types=sqlite3.PARSE_DECLTYPES
+    )
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     with open(os.path.join(__location__, 'schema.sql')) as f:
         db.executescript(f.read())
@@ -73,9 +76,11 @@ def init_db():
 
 def add_video_url(url, mode):
     db = get_db()
-    count = db.execute("SELECT COUNT(*) FROM video WHERE video_url =? AND video_input_mode = ?", (str(url), str(mode))).fetchone()[0]
+    count = db.execute("SELECT COUNT(*) FROM video WHERE video_url =? AND video_input_mode = ?",
+                       (str(url), str(mode))).fetchone()[0]
     if count > 0:
-        video_id = db.execute("SELECT id FROM video WHERE video_url =? AND video_input_mode = ?", (str(url), str(mode))).fetchone()[0]
+        video_id = db.execute("SELECT id FROM video WHERE video_url =? AND video_input_mode = ?",
+                              (str(url), str(mode))).fetchone()[0]
         return video_id
     cursor = db.cursor()
     cursor.execute('INSERT INTO video(video_url, video_input_mode) VALUES(?,?)', (str(url), str(mode)));
@@ -108,6 +113,7 @@ def add_user(username, password):
     db.commit()
     return user_id
 
+
 def authenticate_user(username, password):
     print(username)
     print(password)
@@ -126,7 +132,8 @@ def delete_user(user_id):
     db = get_db()
     db.execute('DELETE FROM users WHERE id = ?', str(user_id))
 
-def get_settings():    
+
+def get_settings():
     db = get_db()
     cursor = db.cursor()
     settings = cursor.execute(
@@ -141,10 +148,17 @@ def get_settings():
 def get_setting(key):
     db = get_db()
     setting = db.execute('SELECT * FROM settings WHERE setting_name = ?', (key,)).fetchone()
-    if setting is  None:
+    if setting is None:
         return None
     data = create_setting(setting)
     return data
+
+def get_settings_categories():
+    db = get_db()
+    rows = db.execute('SELECT  FROM settings WHERE ')
+    return rows
+
+
 
 def create_setting(row):
     control_types = get_control_types()
@@ -165,7 +179,8 @@ def create_setting(row):
 def add_setting(setting):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('INSERT INTO settings(setting_name, setting_value, setting_tab) values (?,?,?)', (setting.name, str(setting.setting), setting.group))
+    cursor.execute('INSERT INTO settings(setting_name, setting_value, setting_tab) values (?,?,?)',
+                   (setting.name, str(setting.setting), setting.group))
     setting.settingId = cursor.lastrowid
     return setting
 
@@ -227,7 +242,8 @@ def update_status(status):
     if current is not None:
         db = get_db()
         cursor = db.cursor()
-        cursor.execute('UPDATE statuses SET status_value = ? WHERE status_name = ?', (str(status.status), str(status.name)))
+        cursor.execute('UPDATE statuses SET status_value = ? WHERE status_name = ?',
+                       (str(status.status), str(status.name)))
         db.commit()
     else:
         add_status(status)
@@ -256,8 +272,10 @@ def add_log(logMessage):
     if isinstance(logMessage, str):
         db.execute('INSERT INTO logs(submitted_date, log_message) VALUES(?,?)', (datetime.datetime.now(), logMessage))
     else:
-        db.execute('INSERT INTO logs(submitted_date, log_message) VALUES(?,?)', (logMessage.submissiondate, logMessage.message))
+        db.execute('INSERT INTO logs(submitted_date, log_message) VALUES(?,?)',
+                   (logMessage.submissiondate, logMessage.message))
     db.commit()
+
 
 def delete_logs():
     db = get_db()
@@ -270,12 +288,21 @@ def delete_all_logs():
     db.execute('DELETE FROM logs')
     db.commit()
 
-#telemetry stuff can be removed
+
+# telemetry stuff can be removed
 def send_frame(fn):
     db = get_db()
     db.execute('insert into telemetry(frame, sent) values(?,?)', (str(fn), datetime.datetime.now()))
     db.commit()
+
+
 def rec_frame(fn):
     db = get_db()
     db.execute('insert into telemetry(frame, rec) values(?,?)', (str(fn), datetime.datetime.now()))
+    db.commit()
+
+
+def create_setting_category(cat):
+    db = get_db()
+    db.execute('insert into setting_category(name, parent) values(?,?)', (cat.name, cat.parent))
     db.commit()
