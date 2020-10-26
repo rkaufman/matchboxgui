@@ -6,7 +6,7 @@ const SettingItem = (props)=>{
         <DrawerItem {...props} className="setting-drawer-item">
             <span className="vertical-center" style={{width:"100%"}}>
                 <span className={props.icon} style={{float:"left"}}/>
-                <p>{props.text}</p>
+                <p>{props.name}</p>
             </span>
         </DrawerItem>
     )

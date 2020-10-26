@@ -8,7 +8,7 @@ from .db import get_user, \
     add_user, get_db, init_db, \
     authenticate_user, get_user_by_id, \
     get_users, get_settings, get_settings_categories, \
-    create_setting_category
+    create_setting_category, get_detectors, get_settings_by_category
 
 
 def identity(payload):
@@ -75,8 +75,7 @@ def logout():
 
 
 @app.route('/setting', methods=['GET'])
-@jwt_required()
-def get_settings():
+def get_setting():
     try:
         settings = get_settings()
         ret = []
@@ -88,6 +87,20 @@ def get_settings():
         print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
 
+@app.route('/setting/category/<catId>')
+def get_settings_by_cat_id(catId):
+    try:
+        settings = get_settings_by_category(catId)
+        ret = []
+        for stg in settings:
+            dto = json.dumps(stg, default=lambda s: s.__dict__, indent=4)
+            ret.append(dto)
+        return jsonify(ret), 200
+    except Exception as ex:
+        print(ex)
+        return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
+          
+
 
 @app.route('/setting/category', methods=['GET'])
 def get_setting_catgories():
@@ -95,6 +108,7 @@ def get_setting_catgories():
         categories = get_settings_categories()
         return json.dumps(categories), 200
     except Exception as ex:
+        print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get categories'}), 500
 
 
@@ -107,3 +121,10 @@ def add_setting_category():
     except Exception as ex:
         return jsonify({'status': 'fail'}), 500
 
+@app.route('/setting/detectors', methods=['GET'])
+def get_detector():
+    try:
+        detectors = get_detectors()
+        return json.dumps(detectors), 200
+    except Exception as ex:
+        return jsonify({'status': 'fail'}),  500

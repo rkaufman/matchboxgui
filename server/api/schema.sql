@@ -15,8 +15,12 @@ CREATE TABLE setting_control_types (
     kind TEXT NOT NULL
 );
 
+CREATE TABLE dectector(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, icon TEXT);
+
 CREATE TABLE setting_category(id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
+icon TEXT NULL,
+route TEXT NULL,
 parent INTEGER NOT NULL DEFAULT 0);
 
 CREATE TABLE settings (
@@ -24,6 +28,7 @@ CREATE TABLE settings (
     setting_name TEXT NOT NULL UNIQUE,
     setting_value TEXT NOT NULL DEFAULT '',
     setting_category_id INTEGER NOT NULL,
+    setting_detector_id INTEGER NULL,
     setting_control_type_id INTEGER NOT NULL DEFAULT 1,
     setting_required BIT NULL,
     setting_placeholder TEXT NULL,
@@ -49,16 +54,17 @@ CREATE TABLE logs(id INTEGER PRIMARY KEY AUTOINCREMENT, submitted_date DATETIME 
 
 INSERT INTO setting_control_types(kind) VALUES('tb'), ('checkbox'), ('ddl'), ('number'),('decflt'), ('pwd');
 
-INSERT INTO setting_category(name) VALUES ('MXSERVER'),
-                                          ('Video Source'),
-                                          ('Network Configuration'),
-                                          ('Search Settings');
+INSERT INTO setting_category(name, icon, route) VALUES ('MXSERVER', 'fa fa-server fa-x3', '/settings/mxserver'),
+                                          ('Video Source', 'fa fa-video-camera fa-x3', '/settings/video'),
+                                          ('Network Configuration', 'fa fa-share-alt fa-x3', '/settings/network'),
+                                          ('Set Detection', 'fa fa-cogs fa-x3', '/settings/detection');
+INSERT INTO detector(name, icon) VALUES('Faces', 'fa fa-user fa-x3'),('Objects', 'fa fa-cubes fa-x3')
 INSERT INTO setting_category(name, parent)
 VALUES ('Face', (SELECT id FROM setting_category WHERE name = 'Search Settings')),
        ('Vehicles', (SELECT id FROM setting_category WHERE name = 'Search Settings')),
        ('Weapons', (SELECT id FROM setting_category WHERE name = 'Search Settings'));
 
-INSERT INTO settings(setting_name, setting_value, setting_tab, setting_control_type_id, setting_label, setting_help, setting_required, setting_placeholder, sort_order, min_value, max_value, step)
+INSERT INTO settings(setting_name, setting_value, setting_category_id, setting_control_type_id, setting_label, setting_help, setting_required, setting_placeholder, sort_order, min_value, max_value, step)
 VALUES('mx-host', 'myserver.mxservercloud.com', (SELECT id FROM setting_category WHERE name = 'MXSERVER'), (SELECT id FROM setting_control_types WHERE kind = 'tb' LIMIT 1),'MXSERVER Host Name', 'Enter the name of the server hosting MXSERVER application', 1, 'localhost', 1, NULL, NULL, NULL),
 ('mx-username', 'User', (SELECT id FROM setting_category WHERE name = 'MXSERVER'), (SELECT id FROM setting_control_types WHERE kind = 'tb' LIMIT 1), 'MXSERVER Username', 'Enter the name to use when logging into MXSERVER', 1, 'user',2, NULL, NULL, NULL),
 ('mx-pass', 'Password', (SELECT id FROM setting_category WHERE name = 'MXSERVER'), (SELECT id FROM setting_control_types WHERE kind = 'pwd' LIMIT 1),'MXSERVER Password', 'Enter the password to use when connecting to MXSERVER', 1, NULL,3, NULL, NULL, NULL),

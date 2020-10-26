@@ -17,28 +17,25 @@ export class Settings extends React.Component{
         super(props);
         this.state = {
             expanded: true,
-            selectedId: this.items.findIndex(x=>x.selected===true)
+            selectedSettings: []
         }
     }
     componentDidMount() {
+        this.props.settingAction.getSettingCategories();
         this.props.settingAction.getSettings();
     }
 
-    items = [
-        {text: "MXSERVER", icon:"fa fa-server fa-x3", selected: true, route: "/settings/mxserver"},
-        {text: "Video Source", icon:"fa fa-video-camera fa-x3", selected: true, route: "/settings/video"},
-        {text: "Network Configuration", icon:"fa fa-share-alt fa-x3", selected: true, route: "/settings/network"},
-        {text: "Set Detection", icon:"fa fa-cogs fa-x3", selected: true, route: "/settings/detection"},
-    ]
     handleClick = ()=>{
         
     }
-    onSelect = (e)=>{
-        this.setState({selectedId: e.itemIndex});
+    onSelect = (e)=> {
+        //this.setState({
+        //    selectedSettings: this.props.settings.find(x=>x.id === e.itemTarget.props.id)
+        //});
         this.props.history.push(e.itemTarget.props.route);
     }
     setSelectedItem = (pathName) => {
-        let currentPath = this.items.find(item => item.route === pathName);
+        let currentPath = this.props.categories.find(item => item.route === pathName);
         if (currentPath && currentPath.text) {
             return currentPath.text;
         }
@@ -48,30 +45,32 @@ export class Settings extends React.Component{
         mode: 'push',
         width: 300
     }
-    render(){
-        let selected = this.setSelectedItem(this.props.location.pathName)
+    render() {
+        let selected = this.props.categories.length === 0 ? '' : this.setSelectedItem(this.props.location.pathName);
         return(<Drawer expanded={this.state.expanded}
-                    className="setting-drawer"
-                    items={this.items.map((item)=>({
-                        ...item, selected: item.text === selected
+                       className="setting-drawer"
+                       items={this.props.categories.map((item) => ({
+                        ...item,
+                        selected: item.text === selected
                     }))}{...this.drawerProps}
-                    onSelect={this.onSelect}
-                    item={SettingItem}>
-                        <DrawerContent>
-                            <Switch>
-                                <Route exact path="/settings/mxserver" component={Mxserver}/>
-                                <Route exact path="/settings/video" component={VideoSettings}/>
-                                <Route exact path="/settings/network" component={NetworkConfiguration}/>
-                                <Route exact path="/settings/detection" component={DetectionSettings}/>
-                            </Switch>
-                        </DrawerContent>
-                    </Drawer>)
+                       onSelect={this.onSelect}
+                       item={SettingItem}>
+                   <DrawerContent style={{paddingLeft: "1%"}}>
+                       <Switch>
+                           <Route exact path="/settings/mxserver" component={()=><Mxserver setting={this.state.selectedSettings}/>}/>
+                           <Route exact path="/settings/video" component={VideoSettings}/>
+                           <Route exact path="/settings/network" component={NetworkConfiguration}/>
+                           <Route exact path="/settings/detection" component={DetectionSettings}/>
+                       </Switch>
+                   </DrawerContent>
+               </Drawer>);
     }
 }
 
 const mapStateToProps = (state,ownProps)=>{
     return {
-        settings: state.settings,
+        settings: state.settings.settings,
+        categories: state.settings.categories,
         history: ownProps.history
     }
 }

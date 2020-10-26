@@ -145,6 +145,16 @@ def get_settings():
     return result
 
 
+def get_settings_by_category(catId):
+    db = get_db()
+    cursor = db.cursor()
+    settings = cursor.execute('select * from settings where setting_category_id = ?', str(catId)).fetchall()
+    data = []
+    for row in settings:
+        data.append(create_setting(row))
+    return data
+
+
 def get_setting(key):
     db = get_db()
     setting = db.execute('SELECT * FROM settings WHERE setting_name = ?', (key,)).fetchone()
@@ -153,10 +163,40 @@ def get_setting(key):
     data = create_setting(setting)
     return data
 
+def add_child_to_parent_category(c, parent, parents):
+    for p in parents:
+        if p["id"] == parent:
+            p["children"].append(c)
+            return True
+    return false
+        
+
 def get_settings_categories():
     db = get_db()
-    rows = db.execute('SELECT  FROM settings WHERE ')
-    return rows
+    rows = db.execute('SELECT * FROM setting_category')
+    parents = []
+    children = []
+    for id,name,icon,route,parent in rows:
+        c = {
+                "id":id,
+                "name": str(name),
+                "icon": str(icon),
+                "route": str(route),
+                "parent": parent,
+                "children": []
+            }
+        if parent > 0:
+            print('adding child')
+            success = add_child_to_parent_category(c, parent, parents)
+            if success == False:
+                children.append(c)
+        else:
+            print(parent)
+            parents.append(c);
+    if len(children) > 0:
+        for ch in children:
+            add_child_to_parent_category(ch, children,ch["parent"], parents)
+    return parents
 
 
 
@@ -164,7 +204,7 @@ def create_setting(row):
     control_types = get_control_types()
     s = Setting(row['setting_name'], row['setting_value'])
     s.settingId = row['id']
-    s.group = str(row['setting_tab'])
+    s.group = str(row['setting_category_id'])
     s.controlType = filter_control(row['setting_control_type_id'], control_types)
     s.help = str(row['setting_help'])
     s.label = str(row['setting_label'])
@@ -306,3 +346,20 @@ def create_setting_category(cat):
     db = get_db()
     db.execute('insert into setting_category(name, parent) values(?,?)', (cat.name, cat.parent))
     db.commit()
+
+
+def get_detectors():
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        rows = cursor.execute('select * from detector').fetchall()
+    except Exception as e:
+        print(e)
+    data = []
+    print('looping')
+    for id,name,icon in rows:
+        data.append({
+            "id": id,
+            "name": name,
+            "icon": icon})
+    return data

@@ -4,10 +4,10 @@
 }
 
 .setting-drawer-item{
-    background-color: #3a3a3a;
+    background-color: #3a3a3a !important;
     border-radius: .5em;
     height: 3.5em;
-    color: white;
+    color: white !important;
     margin: 9.5px;
     position: relative;
     text-align: left;
