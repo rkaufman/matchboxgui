@@ -5,40 +5,54 @@ import { connect } from 'react-redux';
 import {Drawer, DrawerContent} from '@progress/kendo-react-layout';
 import {settingActions} from '../actions/settingActions'
 import { bindActionCreators } from "redux";
-import Mxserver from './Mxserver';
+import RegularSettings from './RegularSettings';
 import VideoSettings from './VideoSettings';
 import NetworkConfiguration from './NetworkConfigurationSettings';
 import DetectionSettings from './DetectionSettings';
-import SettingItem from './SettingItem';
+import CategoryItem from './CategoryItem';
 import './settings.css';
 
-export class Settings extends React.Component{
-    constructor(props){
+export class Settings extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             expanded: true,
-            selectedSettings: []
+            selectedSettings: [],
+            selectedCategory: null
         }
     }
+
     componentDidMount() {
         this.props.settingAction.getSettingCategories();
         this.props.settingAction.getSettings();
     }
 
-    handleClick = ()=>{
-        
+    handleClick = () => {
+
     }
-    onSelect = (e)=> {
-        //this.setState({
-        //    selectedSettings: this.props.settings.find(x=>x.id === e.itemTarget.props.id)
-        //});
+
+    onSelect = (e) => {
+        let settings = [];
+        this.props.settings.map((x,i) => { if(parseInt(x._group) === e.itemTarget.props.id)settings.push(x);} );
+        this.setState({
+            selectedSettings: settings
+        });
+
         this.props.history.push(e.itemTarget.props.route);
     }
     setSelectedItem = (pathName) => {
         let currentPath = this.props.categories.find(item => item.route === pathName);
-        if (currentPath && currentPath.text) {
+        if (currentPath && currentPath.route) {
             return currentPath.text;
         }
+        return '';
+    }
+    setSelectedId = (pathName) => {
+        let currentPath = this.props.categories.find(item => item.route === pathName);
+        if (currentPath) {
+            return currentPath.id;
+        }
+        return 0;
     }
     drawerProps = {
         position: 'start',
@@ -46,7 +60,8 @@ export class Settings extends React.Component{
         width: 300
     }
     render() {
-        let selected = this.props.categories.length === 0 ? '' : this.setSelectedItem(this.props.location.pathName);
+        const selected = this.props.categories.length === 0 ? '' : this.setSelectedItem(this.props.location.pathname);
+        const selectedId = this.props.categories.length === 0 ? 0 : this.setSelectedId(this.props.location.pathname);
         return(<Drawer expanded={this.state.expanded}
                        className="setting-drawer"
                        items={this.props.categories.map((item) => ({
@@ -54,12 +69,12 @@ export class Settings extends React.Component{
                         selected: item.text === selected
                     }))}{...this.drawerProps}
                        onSelect={this.onSelect}
-                       item={SettingItem}>
+                       item={CategoryItem}>
                    <DrawerContent style={{paddingLeft: "1%"}}>
                        <Switch>
-                           <Route exact path="/settings/mxserver" component={()=><Mxserver setting={this.state.selectedSettings}/>}/>
-                           <Route exact path="/settings/video" component={VideoSettings}/>
-                           <Route exact path="/settings/network" component={NetworkConfiguration}/>
+                           <Route exact path="/settings/mxserver" component={()=><RegularSettings categoryId={selectedId}/>}/>
+                           <Route exact path="/settings/video" component={()=><RegularSettings categoryId={selectedId}/>}/>
+                           <Route exact path="/settings/network" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/detection" component={DetectionSettings}/>
                        </Switch>
                    </DrawerContent>

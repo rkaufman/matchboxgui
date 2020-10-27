@@ -12,6 +12,15 @@ export default function settings(state = { settings: [], categories: [] }, actio
                 draft => {
                     draft.categories = action.categories;
                 });
+        case settingConstants.SETTING_CHANGED:
+            return produce(state,
+                draft => {
+                    draft.settings.forEach(s => {
+                        if (s._settingId === action.setting.next._settingId) {
+                            s._setting = action.setting.next._setting;
+                        }
+                    });
+                });
         default:
             return state;
     }

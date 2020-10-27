@@ -1,10 +1,7 @@
 import * as types from './actionTypes';
 import settingService from "../services/settingService";
 
-export const settingActions = {
-    getSettings,
-    getSettingCategories
-}
+
 const getSettingSuccess = (settings)=>{
     return {type: types.GET_SETTINGS_SUCCESS, settings};
 }
@@ -16,6 +13,21 @@ const getSettingCategoriesSuccess = (categories) => {
 }
 const getSettingCategoriesFailure = (err) => {
     return { type: types.GET_SETTINGS_CATEGORIES_FAILURE, err };
+}
+const settingChanged = (setting) => {
+    return { type: types.SETTING_CHANGED, setting };
+}
+const settingSelected = (setting) => {
+    return { type: types.SETTING_DESELECTED, setting };
+}
+const settingDeselected = (setting) => {
+    return { type: types.SETTING_DESELECTED, setting };
+}
+const settingCategorySelected = (category) => {
+    return { type: types.SETTING_CATEGORY_SELECTED, category };
+}
+const settingCategoryDeselected = (category) => {
+    return { type: types.SETTING_CATEGORY_DESELECTED, category };
 }
 function getSettings(){
     return (dispatch)=> {
@@ -36,5 +48,13 @@ function getSettingCategories() {
         });
     }
 }
-
+export const settingActions = {
+    getSettings,
+    getSettingCategories,
+    settingChanged,
+    settingSelected,
+    settingDeselected,
+    settingCategorySelected,
+    settingCategoryDeselected
+}
 export default settingActions;

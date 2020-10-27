@@ -15,7 +15,11 @@ function getAll(){
     return fetch(`${config.apiUrl}/setting`, requestOptions)
         .then(handleResponse)
         .then(s => {
-            return s;
+            return s.map((w, i) => {
+                 var data = JSON.parse(w);
+                 data.changed = false;
+                 return data;
+            });
         });
 }
 function getCategories() {
@@ -26,7 +30,10 @@ function getCategories() {
     return fetch(`${config.apiUrl}/setting/category`, requestOptions)
         .then(handleResponse)
         .then(c => {
-            return c;
+            return c.map((cat, i) => {
+                cat.changed = "false";
+                return cat;
+            });
         });
 }
 function handleResponse(response) {
