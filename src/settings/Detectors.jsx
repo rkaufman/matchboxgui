@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardBody, CardTitle } from '@progress/kendo-react-layout';
 
 
-class DetectionSettings extends React.Component{
+class Detectors extends React.Component{
     render(){
         return(<span>
                    <div className="row" style={{width: '25%'}}>
@@ -27,4 +27,4 @@ class DetectionSettings extends React.Component{
     }
 }
 
-export default DetectionSettings;
+export default Detectors;
