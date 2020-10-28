@@ -165,3 +165,55 @@ def update_settings():
     except Exception as ex:
         print(ex)
         return jsonify({'status': 'fail'}), 500
+
+@app.route('/logs')
+def logs():
+    data = sqlitedb.get_logs()
+    return jsonify(LogMessageEncoder().encode(data))
+
+@app.route('/status', methods=['GET'])
+def status():
+    #
+    # Update db for status checks:
+    #
+
+    # 1.  Are we logged in to MXSERVER
+    (login_success, _, _, _, _, _) = mx.login()
+    if login_success is True:
+        sqlitedb.update_status(Status(StatusType.SERVER, True, ''))
+    else:
+        sqlitedb.update_status(Status(StatusType.SERVER, False, ''))
+
+    # 2.  Streaming: update this value elsewhere
+        # sqlitedb.update_status(Status(StatusType.STREAM, True, ''))
+
+    # 3.  Detecting: update this value elsewhere
+        # sqlitedb.update_status(Status(StatusType.FACEFIND, True, ''))
+
+    # 4.  Searching: if we have opted to search AND we are logged in, lets say
+    # we're searching
+    should_search = db.get_setting("should-submit-face-searches")
+    if login_success is True and should_search is True:
+        sqlitedb.update_status(Status(StatusType.SEARCH, True, ''))
+    else:
+        sqlitedb.update_status(Status(StatusType.SEARCH, False, ''))
+
+    # sqlitedb.delete_all_logs()
+    mxserver = sqlitedb.get_setting('mx-host')
+    camera = sqlitedb.get_setting('rtsp-url')
+    url = ''
+    if "@" in camera.setting:
+        if '://' in camera.setting:
+            st = camera.setting.find("://")
+            st = st + 3
+        else:
+            st = 0
+        e = camera.setting.find("@")
+        url = camera.setting[:st] + 'XXXXXXXXXX' + camera.setting[e:]
+    return render_template('status.html', mxserver=mxserver.setting, camera=url, hostip=mlUtil.get_ip_address())
+
+
+@app.route('/status/data')
+def status_data():
+    data = sqlitedb.get_statuses()
+    return jsonify(StatusEncoder().encode(data))
