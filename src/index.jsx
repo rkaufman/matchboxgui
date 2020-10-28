@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import {Router} from 'react-router-dom';
-import configureStore from './helpers/store';
+import store from './helpers/store';
 import ReduxToastr from 'react-redux-toastr';
 import App from './app/App';
 import history from './helpers/history';
@@ -10,7 +10,6 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 // setup fake backend
 //import { configureFakeBackend } from './helpers/fake-backend';
 //configureFakeBackend();
-const store = configureStore(history)
 render(
     <Provider store={store}>
         <div className="full-height">

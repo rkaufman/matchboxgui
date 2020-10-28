@@ -16,9 +16,27 @@ export default function settings(state = { settings: [], categories: [] }, actio
             return produce(state,
                 draft => {
                     draft.settings.forEach(s => {
-                        if (s._settingId === action.setting.next._settingId) {
-                            s._setting = action.setting.next._setting;
+                        if (s.id === action.setting.id) {
+                            s.setting = action.setting.setting;
+                            s.hasChanges = true;
                         }
+                    });
+                });
+        case settingConstants.SETTING_SELECTED:
+            return produce(state,
+                draft => {
+                    draft.settings.forEach(s => {
+                        s.selected = false;
+                        if (s.id === action.setting.id) {
+                            s.selected = true;
+                        }
+                    });
+                });
+        case settingConstants.SETTINGS_SAVED_SUCCESSFULLY:
+            return produce(state,
+                draft => {
+                    draft.settings.forEach(s => {
+                        s.hasChanges = false;
                     });
                 });
         default:

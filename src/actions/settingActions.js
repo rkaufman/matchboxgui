@@ -1,5 +1,7 @@
 import * as types from './actionTypes';
 import settingService from "../services/settingService";
+import { actions as toastrActions } from 'react-redux-toastr';
+import store from '../helpers/store';
 
 
 const getSettingSuccess = (settings)=>{
@@ -18,7 +20,7 @@ const settingChanged = (setting) => {
     return { type: types.SETTING_CHANGED, setting };
 }
 const settingSelected = (setting) => {
-    return { type: types.SETTING_DESELECTED, setting };
+    return { type: types.SETTING_SELECTED, setting };
 }
 const settingDeselected = (setting) => {
     return { type: types.SETTING_DESELECTED, setting };
@@ -28,6 +30,9 @@ const settingCategorySelected = (category) => {
 }
 const settingCategoryDeselected = (category) => {
     return { type: types.SETTING_CATEGORY_DESELECTED, category };
+}
+const settingsSavedSuccessfully = () => {
+    return { type: types.SETTINGS_SAVED_SUCCESSFULLY, success:true };
 }
 function getSettings(){
     return (dispatch)=> {
@@ -48,6 +53,33 @@ function getSettingCategories() {
         });
     }
 }
+
+function saveSettings() {
+    const state = store.getState();
+    const changed = state.settings.settings.filter(s => s.hasChanges === true);
+    return (dispatch) => {
+        return settingService.saveSettings(changed).then(success => {
+            if (success && success === true) {
+                dispatch(toastrActions.add({
+                    type: 'success',
+                    message: 'Successfully saved settings.',
+                    title: 'Successfully Saved'
+                }));
+                dispatch(settingsSavedSuccessfully);
+            } else {
+                throw 'Failed to save settings';
+            }
+            
+        }).catch(e => {
+            dispatch(toastrActions.add({
+                type: 'error',
+                title: 'Failed to Save',
+                attention: true,
+                message: 'Failed to save the settings with the following error: ' + e
+            }));
+        });
+    }
+}
 export const settingActions = {
     getSettings,
     getSettingCategories,
@@ -55,6 +87,7 @@ export const settingActions = {
     settingSelected,
     settingDeselected,
     settingCategorySelected,
-    settingCategoryDeselected
+    settingCategoryDeselected,
+    saveSettings
 }
 export default settingActions;

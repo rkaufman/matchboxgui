@@ -2,10 +2,6 @@ import config from './config';
 import { authHeader } from '../helpers';
 import history from "../helpers/history";
 
-export const settingService = {
-    getAll,
-    getCategories
-}
 
 function getAll(){
     let requestOptions = {
@@ -16,9 +12,8 @@ function getAll(){
         .then(handleResponse)
         .then(s => {
             return s.map((w, i) => {
-                 var data = JSON.parse(w);
-                 data.changed = false;
-                 return data;
+                 w.hasChanges = false;
+                 return w;
             });
         });
 }
@@ -31,9 +26,23 @@ function getCategories() {
         .then(handleResponse)
         .then(c => {
             return c.map((cat, i) => {
-                cat.changed = "false";
+                cat.hasChanges = false;
                 return cat;
             });
+        });
+}
+const saveSettings = (settings) => {
+    const authHdr = authHeader();
+    authHdr['Content-Type'] = "application/json";
+    const opt = {
+        method: 'PATCH',
+        headers: authHdr,
+        body: JSON.stringify(settings)
+    };
+    return fetch(`${config.apiUrl}/setting`, opt)
+        .then(r => {
+            if (r.ok) return true;
+            return Promise.reject(r.statusText());
         });
 }
 function handleResponse(response) {
@@ -53,4 +62,10 @@ function handleResponse(response) {
         return data;
     });
 }
+export const settingService = {
+    getAll,
+    getCategories,
+    saveSettings
+}
+
 export default settingService;

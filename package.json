@@ -11,6 +11,7 @@
     "@progress/kendo-licensing": "^1.0.1",
     "@progress/kendo-react-buttons": "^3.17.0",
     "@progress/kendo-react-dialogs": "^3.18.0",
+    "@progress/kendo-react-dropdowns": "^4.0.0",
     "@progress/kendo-react-inputs": "^4.0.0",
     "@progress/kendo-react-intl": "^3.18.0",
     "@progress/kendo-react-layout": "^3.18.0",

@@ -8,7 +8,8 @@ from .db import get_user, \
     add_user, get_db, init_db, \
     authenticate_user, get_user_by_id, \
     get_users, get_settings, get_settings_categories, \
-    create_setting_category, get_detectors, get_settings_by_category
+    create_setting_category, get_detectors, get_settings_by_category, \
+    update_setting
 
 
 def identity(payload):
@@ -27,6 +28,12 @@ x = get_db()
 if x is None:
     init_db()
 
+video_input_modes = [
+      { "text": 'Onboard', "id": 1 },
+      { "text": 'RTSP', "id": 2 },
+      { "text": 'YouTube', "id": 3 },
+      { "text": 'File', "id": 4 }
+    ];
 
 def authenticate(username, password):
     try:
@@ -80,9 +87,26 @@ def get_setting():
         settings = get_settings()
         ret = []
         for stg in settings:
-            dto = json.dumps(stg, default=lambda s: s.__dict__, indent=4)
-            ret.append(dto)
-        return jsonify(ret), 200
+            s = {
+                   'name': stg.name,
+                   'id': stg.settingId,
+                   'setting': stg.setting,
+                   'controlType': {'id': stg.controlType.id, 'name': stg.controlType.name},
+                   'group': stg.group,
+                   'label': stg.label,
+                   'placeholder': stg.placeholder,
+                   'help': stg.help,
+                   'required': stg.required,
+                   'step': stg.step,
+                   'max': stg.max,
+                   'min': stg.min
+                }
+            if stg.name == 'conn-type':
+                for m in video_input_modes:
+                   if str(m['id']) == str(stg.setting):
+                        s['setting'] = m
+            ret.append(s)
+        return json.dumps(ret), 200
     except Exception as ex:
         print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
@@ -128,3 +152,16 @@ def get_detector():
         return json.dumps(detectors), 200
     except Exception as ex:
         return jsonify({'status': 'fail'}),  500
+
+@app.route('/setting', methods=['PATCH'])
+def update_settings():
+    try:
+        settings = json.loads(request.data)
+        if len(settings) == 0:
+            return jsonify({'status', 'failed'}), 401
+        for s in settings:
+            update_setting(s['_settingId'],s['_setting'])
+        return jsonify({'status':'success'}), 200
+    except Exception as ex:
+        print(ex)
+        return jsonify({'status': 'fail'}), 500

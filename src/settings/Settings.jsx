@@ -6,8 +6,6 @@ import {Drawer, DrawerContent} from '@progress/kendo-react-layout';
 import {settingActions} from '../actions/settingActions'
 import { bindActionCreators } from "redux";
 import RegularSettings from './RegularSettings';
-import VideoSettings from './VideoSettings';
-import NetworkConfiguration from './NetworkConfigurationSettings';
 import DetectionSettings from './DetectionSettings';
 import CategoryItem from './CategoryItem';
 import './settings.css';
@@ -33,7 +31,7 @@ export class Settings extends React.Component {
 
     onSelect = (e) => {
         let settings = [];
-        this.props.settings.map((x,i) => { if(parseInt(x._group) === e.itemTarget.props.id)settings.push(x);} );
+        this.props.settings.map((x,i) => { if(parseInt(x.group) === e.itemTarget.props.id)settings.push(x);} );
         this.setState({
             selectedSettings: settings
         });
@@ -43,7 +41,7 @@ export class Settings extends React.Component {
     setSelectedItem = (pathName) => {
         let currentPath = this.props.categories.find(item => item.route === pathName);
         if (currentPath && currentPath.route) {
-            return currentPath.text;
+            return currentPath.name;
         }
         return '';
     }
@@ -60,13 +58,16 @@ export class Settings extends React.Component {
         width: 300
     }
     render() {
-        const selected = this.props.categories.length === 0 ? '' : this.setSelectedItem(this.props.location.pathname);
+        const sel = this.props.categories.length === 0 ? '' : this.setSelectedItem(this.props.location.pathname);
         const selectedId = this.props.categories.length === 0 ? 0 : this.setSelectedId(this.props.location.pathname);
         return(<Drawer expanded={this.state.expanded}
-                       className="setting-drawer"
+                       className="setting-drawer full-height"
                        items={this.props.categories.map((item) => ({
-                        ...item,
-                        selected: item.text === selected
+                        id: item.id,
+                        name: item.name,
+                        route: item.route,
+                        icon: item.icon,
+                        selected: item.name === sel
                     }))}{...this.drawerProps}
                        onSelect={this.onSelect}
                        item={CategoryItem}>

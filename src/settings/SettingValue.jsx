@@ -12,14 +12,17 @@ export class SettingValue extends React.Component {
         }
     }
     change = (e) => {
-        let original = this.props.settings.find(s => parseInt(s._settingId) === parseInt(e.target.id));
+        let stgId = e.target.element && e.target.element.type == 'checkbox' ? parseInt(e.target.element.id) : parseInt(e.target.props.id);
+        let original = this.props.settings.find(s => s.id === stgId);
         let next = JSON.parse(JSON.stringify(original));
-        if (original._controlType._name === 'checkbox') {
-            next._setting = e.target.checked.toString();
-        } else {
-            next._setting = e.target.value.toString();
+        if (original.controlType.name === 'checkbox') {
+            next.setting = e.value.toString();
+        } else if (original.controlType.name === 'ddl') {
+          next.setting = e.value;
+        }else {
+            next.setting = e.value.toString();
         }
-        this.props.actions.settingChanged({ next });
+        this.props.actions.settingChanged(next);
     }
     render() {
         return(<InputSelector {...this.props.setting} settingChanged={this.change.bind(this)}/>);

@@ -4,13 +4,19 @@
 }
 
 .setting-drawer-item{
-    background-color: #3a3a3a !important;
+    background-color: #3a3a3a;
     border-radius: .5em;
     height: 3.5em;
-    color: white !important;
+    color: white;
     margin: 9.5px;
     position: relative;
     text-align: left;
+    cursor: pointer;
+}
+
+.setting-drawer-item.k-drawer-item.k-state-selected {
+    background-color: white;
+    color: #525252;
 }
 
 .setting-drawer-item > span > span{
@@ -38,4 +44,11 @@
     position: relative;
     text-align: left;
     border-bottom: 0.5px solid #979797;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.setting-item:hover {
+    background-color: white;
+    color: #707070;
 }
