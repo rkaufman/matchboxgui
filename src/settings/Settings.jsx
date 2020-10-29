@@ -3,10 +3,10 @@ import {withRouter} from 'react-router';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {Drawer, DrawerContent} from '@progress/kendo-react-layout';
-import {settingActions} from '../actions/settingActions'
+import {settingActions} from '../actions'
 import { bindActionCreators } from "redux";
 import RegularSettings from './RegularSettings';
-import DetectionSettings from './DetectionSettings';
+import Detectors from './Detectors';
 import CategoryItem from './CategoryItem';
 import './settings.css';
 
@@ -25,13 +25,9 @@ export class Settings extends React.Component {
         this.props.settingAction.getSettings();
     }
 
-    handleClick = () => {
-
-    }
-
     onSelect = (e) => {
         let settings = [];
-        this.props.settings.map((x,i) => { if(parseInt(x.group) === e.itemTarget.props.id)settings.push(x);} );
+        this.props.settings.map((x) => { if(parseInt(x.group) === e.itemTarget.props.id)settings.push(x);} );
         this.setState({
             selectedSettings: settings
         });
@@ -76,7 +72,9 @@ export class Settings extends React.Component {
                            <Route exact path="/settings/mxserver" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/video" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/network" component={()=><RegularSettings categoryId={selectedId}/>}/>
-                           <Route exact path="/settings/detection" component={DetectionSettings}/>
+                           <Route exact path="/settings/search" component={()=><RegularSettings categoryId={selectedId}/>}/>
+                           <Route exact path="/settings/detection" component={()=><RegularSettings categoryId={selectedId}/>}/>
+                           <Route exact path="/settings/detector" component={Detectors}/>
                        </Switch>
                    </DrawerContent>
                </Drawer>);
