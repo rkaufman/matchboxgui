@@ -27,8 +27,34 @@ function getCategories() {
         .then(c => {
             return c.map((cat, i) => {
                 cat.hasChanges = false;
+                cat.hasSettingChanges = false;
                 return cat;
             });
+        });
+}
+const getDetectors = () => {
+    let opts = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${config.apiUrl}/setting/detectors`, opts)
+        .then(handleResponse)
+        .then(d => {
+            return d;
+        });
+}
+const changeDetector = (id) => {
+    let opts = {
+        method: 'PATCH',
+        headers: authHeader()
+    };
+    return fetch(`${config.apiUrl}/setting/detectors/${id}`, opts)
+        .then(handleResponse)
+        .then((s) => {
+            if (s.status === 'success') {
+                return true;
+            }
+            return false;
         });
 }
 const saveSettings = (settings) => {
@@ -65,7 +91,9 @@ function handleResponse(response) {
 export const settingService = {
     getAll,
     getCategories,
-    saveSettings
+    saveSettings,
+    getDetectors,
+    changeDetector
 }
 
 export default settingService;

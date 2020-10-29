@@ -8,6 +8,7 @@ import { bindActionCreators } from "redux";
 import RegularSettings from './RegularSettings';
 import Detectors from './Detectors';
 import CategoryItem from './CategoryItem';
+import NetworkConfiguration from './NetworkConfiguration';
 import './settings.css';
 
 export class Settings extends React.Component {
@@ -31,7 +32,8 @@ export class Settings extends React.Component {
         this.setState({
             selectedSettings: settings
         });
-
+        this.props.settingAction.settingCategorySelected(e.itemTarget.props.id);
+        this.props.settingAction.settingDeselected();
         this.props.history.push(e.itemTarget.props.route);
     }
     setSelectedItem = (pathName) => {
@@ -63,6 +65,7 @@ export class Settings extends React.Component {
                         name: item.name,
                         route: item.route,
                         icon: item.icon,
+                        hassettingchanges: item.hasSettingChanges.toString(),
                         selected: item.name === sel
                     }))}{...this.drawerProps}
                        onSelect={this.onSelect}
@@ -71,7 +74,7 @@ export class Settings extends React.Component {
                        <Switch>
                            <Route exact path="/settings/mxserver" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/video" component={()=><RegularSettings categoryId={selectedId}/>}/>
-                           <Route exact path="/settings/network" component={()=><RegularSettings categoryId={selectedId}/>}/>
+                           <Route exact path="/settings/network" component={NetworkConfiguration}/>
                            <Route exact path="/settings/search" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/detection" component={()=><RegularSettings categoryId={selectedId}/>}/>
                            <Route exact path="/settings/detector" component={Detectors}/>

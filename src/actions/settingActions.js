@@ -3,7 +3,12 @@ import settingService from "../services/settingService";
 import { actions as toastrActions } from 'react-redux-toastr';
 import store from '../helpers/store';
 
-
+const detectorChangedSuccessfully = (id) => {
+    return { type: types.DETECTOR_CHANGED_SUCCESS, id };
+}
+const getDetectorsSuccess = (detectors) => {
+    return { type: types.GET_DETECTORS_SUCCESS, detectors };
+}
 const getSettingSuccess = (settings)=>{
     return {type: types.GET_SETTINGS_SUCCESS, settings};
 }
@@ -32,7 +37,26 @@ const settingCategoryDeselected = (category) => {
     return { type: types.SETTING_CATEGORY_DESELECTED, category };
 }
 const settingsSavedSuccessfully = () => {
-    return { type: types.SETTINGS_SAVED_SUCCESSFULLY, success:true };
+    return { type: types.SETTINGS_SAVED_SUCCESSFULLY};
+}
+function getDetectors() {
+    return (dispatch) => {
+        return settingService.getDetectors().then(d => {
+            dispatch(getDetectorsSuccess(d));
+            dispatch(toastrActions.add({
+                message: 'Successfully got detectors',
+                type: 'success',
+                title: 'Success'
+            }));
+        }).catch(e => {
+            console.log(e);
+            dispatch(toastrActions.add({
+                message:'Failed to get detectors.',
+                type: 'error',
+                title: 'Error'
+            }));
+        });
+    }
 }
 function getSettings(){
     return (dispatch)=> {
@@ -60,12 +84,12 @@ function saveSettings() {
     return (dispatch) => {
         return settingService.saveSettings(changed).then(success => {
             if (success && success === true) {
+                dispatch(settingsSavedSuccessfully());
                 dispatch(toastrActions.add({
                     type: 'success',
                     message: 'Successfully saved settings.',
                     title: 'Successfully Saved'
                 }));
-                dispatch(settingsSavedSuccessfully);
             } else {
                 throw 'Failed to save settings';
             }
@@ -80,14 +104,36 @@ function saveSettings() {
         });
     }
 }
+function changeDetector(id) {
+    return (dispatch) => {
+        return settingService.changeDetector(id).then(s => {
+            if (s && s === true) {
+                dispatch(detectorChangedSuccessfully(id));
+                dispatch(toastrActions.add({
+                    type: 'success',
+                    title: 'Success',
+                    message: 'Successfully changed detector'
+                }));
+            } else {
+                dispatch(toastrActions.add({
+                    type: 'error',
+                    title: 'Error',
+                    message: 'Failed to change detector'
+                }));
+            }
+        });
+    }
+}
 export const settingActions = {
     getSettings,
     getSettingCategories,
+    getDetectors,
     settingChanged,
     settingSelected,
     settingDeselected,
     settingCategorySelected,
     settingCategoryDeselected,
-    saveSettings
+    saveSettings,
+    changeDetector
 }
 export default settingActions;

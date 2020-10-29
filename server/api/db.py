@@ -356,9 +356,17 @@ def get_detectors():
         print(e)
     data = []
     print('looping')
-    for id, name, icon in rows:
+    for id, name, icon,selected in rows:
         data.append({
             "id": id,
             "name": name,
-            "icon": icon})
+            "icon": icon,
+            "selected": selected == 1})
     return data
+
+def change_detector(id):
+    db = get_db()
+    db.execute('update detector set selected = 0')
+    db.commit()
+    db.execute('update detector set selected = 1 where id = ?', (id))
+    db.commit()

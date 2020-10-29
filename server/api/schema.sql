@@ -15,7 +15,7 @@ CREATE TABLE setting_control_types (
     kind TEXT NOT NULL
 );
 
-CREATE TABLE dectector(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, icon TEXT);
+CREATE TABLE dectector(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, icon TEXT, selected INTEGER);
 
 CREATE TABLE setting_category(id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
@@ -58,7 +58,7 @@ INSERT INTO setting_category(name, icon, route) VALUES ('MXSERVER', 'fa fa-serve
                                           ('Video Source', 'fa fa-video-camera fa-x3', '/settings/video'),
                                           ('Network Configuration', 'fa fa-share-alt fa-x3', '/settings/network'),
                                           ('Set Detection', 'fa fa-cogs fa-x3', '/settings/detection');
-INSERT INTO detector(name, icon) VALUES('Faces', 'fa fa-user fa-x3'),('Objects', 'fa fa-cubes fa-x3');
+INSERT INTO detector(name, icon, selected) VALUES('Faces', 'fa fa-user fa-x3', 1),('Objects', 'fa fa-cubes fa-x3', 0);
 INSERT INTO setting_category(name, parent)
 VALUES ('Face', (SELECT id FROM setting_category WHERE name = 'Search Settings')),
        ('Vehicles', (SELECT id FROM setting_category WHERE name = 'Search Settings')),

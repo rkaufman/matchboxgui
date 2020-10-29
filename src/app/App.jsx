@@ -19,6 +19,11 @@ class App extends React.Component {
         }
         
     }
+    componentDidMount() {
+        if (this.props.loggedIn === true) {
+
+        }
+    }
     render() {
         if(this.props.loggedIn){
             return (

@@ -4,13 +4,15 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt import JWT, jwt_required
 
+from .mx_auth import MxAuth as mx
+
 from .db import get_user, \
     add_user, get_db, init_db, \
     authenticate_user, get_user_by_id, \
     get_users, get_settings, get_settings_categories, \
     create_setting_category, get_detectors, get_settings_by_category, \
     update_setting, get_logs, get_statuses, get_setting, get_status, \
-    update_status
+    update_status, change_detector
 
 
 def identity(payload):
@@ -156,6 +158,16 @@ def get_detector():
         return jsonify({'status': 'fail'}),  500
 
 
+@app.route('/setting/detectors/<id>', methods=['PATCH'])
+def chg_detector(id):
+    try:
+        change_detector(id)
+        return jsonify({'status': 'success', 'message': 'Changed detector.'}), 200
+    except Exception as ex:
+        print(ex)
+        return jsonify({'status': 'fail'}), 500
+
+
 @app.route('/setting', methods=['PATCH'])
 def update_settings():
     try:
@@ -163,7 +175,7 @@ def update_settings():
         if len(settings) == 0:
             return jsonify({'status', 'failed'}), 401
         for s in settings:
-            update_setting(s['_settingId'],s['_setting'])
+            update_setting(s['id'],s['setting'])
         return jsonify({'status':'success'}), 200
     except Exception as ex:
         print(ex)

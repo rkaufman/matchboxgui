@@ -49,7 +49,7 @@ export class Header extends React.Component{
             : <span/>;
         return(<Toolbar className="header">
                    <ToolbarItem>
-                       <img src="/matchbox_logo_horizontal.jpg" alt="MB"/>
+                       <img src="/mb-logo.png" alt="MB"/>
                    </ToolbarItem>
                    <ToolbarSpacer/>
                    <ToolbarItem>

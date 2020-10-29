@@ -1,5 +1,5 @@
 import config from './config';
-import { authHeader } from '../helpers';
+import { authHeader, parseJwt } from '../helpers';
 import history from '../helpers/history'
 
 export const userService = {
@@ -25,7 +25,8 @@ function login(user) {
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('auth_token', JSON.stringify(user));
-            return user;
+            localStorage.setItem('token_exp', parseJwt(user).exp);
+            return { token:user, exp: parseJwt(user) };
         });
 }
 

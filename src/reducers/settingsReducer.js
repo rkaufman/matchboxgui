@@ -1,7 +1,7 @@
 import { settingConstants } from '../constants/settingConstants';
 import { produce } from 'immer';
 
-export default function settings(state = { settings: [], categories: [] }, action) {
+export default function settings(state = { settings: [], categories: [], detectors: [] }, action) {
     switch (action.type) {
         case settingConstants.GET_SETTINGS_SUCCESS:
             return produce(state, draft => {
@@ -19,6 +19,11 @@ export default function settings(state = { settings: [], categories: [] }, actio
                         if (s.id === action.setting.id) {
                             s.setting = action.setting.setting;
                             s.hasChanges = true;
+                            draft.categories.forEach(c => {
+                                if (c.id === parseInt(s.group)) {
+                                    c.hasSettingChanges = true;
+                                }
+                            });
                         }
                     });
                 });
@@ -32,13 +37,39 @@ export default function settings(state = { settings: [], categories: [] }, actio
                         }
                     });
                 });
+        case settingConstants.SETTING_DESELECTED:
+            return produce(state,
+                draft => {
+                    draft.settings.forEach(s => {
+                        s.selected = false;
+                    });
+                    
+                });
         case settingConstants.SETTINGS_SAVED_SUCCESSFULLY:
             return produce(state,
                 draft => {
                     draft.settings.forEach(s => {
                         s.hasChanges = false;
                     });
+                    draft.categories.forEach(c => {
+                        c.hasSettingChanges = false;
+                    });
                 });
+            case settingConstants.GET_DETECTORS_SUCCESS:
+                return produce(state,
+                    draft => {
+                        draft.detectors = action.detectors;
+                    });
+                case settingConstants.DETECTOR_CHANGED_SUCCESS:
+                    return produce(state,
+                        draft => {
+                            draft.detectors.forEach(d => {
+                                d.selected = false;
+                                if (d.id === action.id) {
+                                    d.selected = true;
+                                }
+                            });
+                        });
         default:
             return state;
     }
