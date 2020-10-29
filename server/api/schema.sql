@@ -50,7 +50,7 @@ CREATE TABLE video(
 
 CREATE TABLE statuses(id INTEGER PRIMARY KEY AUTOINCREMENT, status_name TEXT NOT NULL, status_value TEXT NOT NULL, status_display TEXT NOT NULL, sort_order INT NOT NULL);
 
-CREATE TABLE logs(id INTEGER PRIMARY KEY AUTOINCREMENT, submitted_date DATETIME NOT NULL, log_message TEXT NOT NULL);
+CREATE TABLE logs(id INTEGER PRIMARY KEY AUTOINCREMENT, submitted_date DATETIME NOT NULL, log_message TEXT NOT NULL, type TEXT NOT NULL);
 
 INSERT INTO setting_control_types(kind) VALUES('tb'), ('checkbox'), ('ddl'), ('number'),('decflt'), ('pwd');
 
@@ -58,7 +58,7 @@ INSERT INTO setting_category(name, icon, route) VALUES ('MXSERVER', 'fa fa-serve
                                           ('Video Source', 'fa fa-video-camera fa-x3', '/settings/video'),
                                           ('Network Configuration', 'fa fa-share-alt fa-x3', '/settings/network'),
                                           ('Set Detection', 'fa fa-cogs fa-x3', '/settings/detection');
-INSERT INTO detector(name, icon) VALUES('Faces', 'fa fa-user fa-x3'),('Objects', 'fa fa-cubes fa-x3')
+INSERT INTO detector(name, icon) VALUES('Faces', 'fa fa-user fa-x3'),('Objects', 'fa fa-cubes fa-x3');
 INSERT INTO setting_category(name, parent)
 VALUES ('Face', (SELECT id FROM setting_category WHERE name = 'Search Settings')),
        ('Vehicles', (SELECT id FROM setting_category WHERE name = 'Search Settings')),

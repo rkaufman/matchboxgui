@@ -1,16 +1,13 @@
-import sqlite3
-import click
+import datetime
 import os
-import datetime
-from flask import current_app, g
-from flask.cli import with_appcontext
+import sqlite3
+
+from flask import g
 from werkzeug.security import check_password_hash, generate_password_hash
-import numpy as np
-from .setting import Setting
+
 from .control_type import ControlType
+from .setting import Setting
 from .status import Status
-from .log_message import LogMessage
-import datetime
 from .user import User
 
 DATABASE = os.path.join(os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))), 'mxedgesql.db')
@@ -83,7 +80,7 @@ def add_video_url(url, mode):
                               (str(url), str(mode))).fetchone()[0]
         return video_id
     cursor = db.cursor()
-    cursor.execute('INSERT INTO video(video_url, video_input_mode) VALUES(?,?)', (str(url), str(mode)));
+    cursor.execute('INSERT INTO video(video_url, video_input_mode) VALUES(?,?)', (str(url), str(mode)))
     video_id = cursor.lastrowid
     db.commit()
     return video_id
@@ -170,22 +167,22 @@ def add_child_to_parent_category(c, parent, parents):
             p["children"].append(c)
             return True
     return False
-        
+
 
 def get_settings_categories():
     db = get_db()
     rows = db.execute('SELECT * FROM setting_category')
     parents = []
     children = []
-    for id,name,icon,route,parent in rows:
+    for id, name, icon, route, parent in rows:
         c = {
-                "id":id,
-                "name": str(name),
-                "icon": str(icon),
-                "route": str(route),
-                "parent": parent,
-                "children": []
-            }
+            "id": id,
+            "name": str(name),
+            "icon": str(icon),
+            "route": str(route),
+            "parent": parent,
+            "children": []
+        }
         if parent > 0:
             print('adding child')
             success = add_child_to_parent_category(c, parent, parents)
@@ -193,10 +190,10 @@ def get_settings_categories():
                 children.append(c)
         else:
             print(parent)
-            parents.append(c);
+            parents.append(c)
     if len(children) > 0:
         for ch in children:
-            add_child_to_parent_category(ch, children,ch["parent"], parents)
+            add_child_to_parent_category(ch, children, ch["parent"], parents)
     return parents
 
 
@@ -219,7 +216,7 @@ def create_setting(row):
 def add_setting(setting):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('INSERT INTO settings(setting_name, setting_value, setting_tab) values (?,?,?)',
+    cursor.execute('INSERT INTO settings(setting_name, setting_value, setting_category_id) values (?,?,?)',
                    (setting.name, str(setting.setting), setting.group))
     setting.settingId = cursor.lastrowid
     return setting
@@ -247,8 +244,8 @@ def get_control_types():
     return data
 
 
-def filter_control(kind, list):
-    for k in list:
+def filter_control(kind, lst):
+    for k in lst:
         if k.id == kind:
             return k
     return None
@@ -260,7 +257,7 @@ def get_statuses():
     rows = cursor.execute('SELECT * FROM statuses ORDER BY sort_order').fetchall()
     data = []
     for r in rows:
-        data.append(Status(r['status_name'], r['status_value'], r['status_display']));
+        data.append(Status(r['status_name'], r['status_value'], r['status_display']))
     return data
 
 
@@ -302,18 +299,20 @@ def get_logs():
     rows = cursor.execute('SELECT * FROM logs ORDER BY datetime(submitted_date) DESC LIMIT 100').fetchall()
     data = []
     for row in rows:
-        data.append(LogMessage(row['log_message'], row['submitted_date']))
+        data.append(
+            {'message': row['log_message'], 'submitted_date': row['submitted_date'], 'msg_type': row['msg_type']})
     return data
 
 
-def add_log(logMessage):
+def add_log(log_message, msg_type):
     db = get_db()
 
-    if isinstance(logMessage, str):
-        db.execute('INSERT INTO logs(submitted_date, log_message) VALUES(?,?)', (datetime.datetime.now(), logMessage))
+    if isinstance(log_message, str):
+        db.execute('INSERT INTO logs(submitted_date, log_message, msg_type) VALUES(?,?,?)',
+                   (datetime.datetime.now(), log_message, msg_type))
     else:
-        db.execute('INSERT INTO logs(submitted_date, log_message) VALUES(?,?)',
-                   (logMessage.submissiondate, logMessage.message))
+        db.execute('INSERT INTO logs(submitted_date, log_message, msg_type) VALUES(?,?,?)',
+                   (log_message.submissiondate, log_message.message, log_message.msg_type))
     db.commit()
 
 
@@ -330,16 +329,16 @@ def delete_all_logs():
 
 
 # telemetry stuff can be removed
-def send_frame(fn):
-    db = get_db()
-    db.execute('insert into telemetry(frame, sent) values(?,?)', (str(fn), datetime.datetime.now()))
-    db.commit()
-
-
-def rec_frame(fn):
-    db = get_db()
-    db.execute('insert into telemetry(frame, rec) values(?,?)', (str(fn), datetime.datetime.now()))
-    db.commit()
+# def send_frame(fn):
+#     db = get_db()
+#     db.execute('insert into telemetry(frame, sent) values(?,?)', (str(fn), datetime.datetime.now()))
+#     db.commit()
+#
+# 
+# def rec_frame(fn):
+#     db = get_db()
+#     db.execute('insert into telemetry(frame, rec) values(?,?)', (str(fn), datetime.datetime.now()))
+#     db.commit()
 
 
 def create_setting_category(cat):
@@ -357,7 +356,7 @@ def get_detectors():
         print(e)
     data = []
     print('looping')
-    for id,name,icon in rows:
+    for id, name, icon in rows:
         data.append({
             "id": id,
             "name": name,
