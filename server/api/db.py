@@ -296,6 +296,7 @@ def delete_status(name):
 
 
 def get_logs():
+    delete_logs()
     db = get_db()
     cursor = db.cursor()
     rows = cursor.execute('SELECT * FROM logs ORDER BY datetime(submitted_date) DESC LIMIT 100').fetchall()
