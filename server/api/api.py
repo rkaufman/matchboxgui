@@ -9,7 +9,8 @@ from .db import get_user, \
     authenticate_user, get_user_by_id, \
     get_users, get_settings, get_settings_categories, \
     create_setting_category, get_detectors, get_settings_by_category, \
-    update_setting
+    update_setting, get_logs, get_statuses, get_setting, get_status, \
+    update_status
 
 
 def identity(payload):
@@ -111,6 +112,7 @@ def get_setting():
         print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
 
+
 @app.route('/setting/category/<catId>')
 def get_settings_by_cat_id(catId):
     try:
@@ -124,7 +126,6 @@ def get_settings_by_cat_id(catId):
         print(ex)
         return jsonify({'status': 'fail', 'message': 'Failed to get settings from the database'}), 500
           
-
 
 @app.route('/setting/category', methods=['GET'])
 def get_setting_catgories():
@@ -145,6 +146,7 @@ def add_setting_category():
     except Exception as ex:
         return jsonify({'status': 'fail'}), 500
 
+
 @app.route('/setting/detectors', methods=['GET'])
 def get_detector():
     try:
@@ -152,6 +154,7 @@ def get_detector():
         return json.dumps(detectors), 200
     except Exception as ex:
         return jsonify({'status': 'fail'}),  500
+
 
 @app.route('/setting', methods=['PATCH'])
 def update_settings():
@@ -166,10 +169,12 @@ def update_settings():
         print(ex)
         return jsonify({'status': 'fail'}), 500
 
+
 @app.route('/logs')
 def logs():
-    data = sqlitedb.get_logs()
-    return jsonify(LogMessageEncoder().encode(data))
+    data = get_logs()
+    return json.dumps(data)
+
 
 @app.route('/status', methods=['GET'])
 def status():
@@ -180,9 +185,9 @@ def status():
     # 1.  Are we logged in to MXSERVER
     (login_success, _, _, _, _, _) = mx.login()
     if login_success is True:
-        sqlitedb.update_status(Status(StatusType.SERVER, True, ''))
+        update_status(Status(StatusType.SERVER, True, ''))
     else:
-        sqlitedb.update_status(Status(StatusType.SERVER, False, ''))
+        update_status(Status(StatusType.SERVER, False, ''))
 
     # 2.  Streaming: update this value elsewhere
         # sqlitedb.update_status(Status(StatusType.STREAM, True, ''))
@@ -192,15 +197,15 @@ def status():
 
     # 4.  Searching: if we have opted to search AND we are logged in, lets say
     # we're searching
-    should_search = db.get_setting("should-submit-face-searches")
+    should_search = get_setting("should-submit-face-searches")
     if login_success is True and should_search is True:
-        sqlitedb.update_status(Status(StatusType.SEARCH, True, ''))
+        update_status(Status(StatusType.SEARCH, True, ''))
     else:
-        sqlitedb.update_status(Status(StatusType.SEARCH, False, ''))
+        update_status(Status(StatusType.SEARCH, False, ''))
 
     # sqlitedb.delete_all_logs()
-    mxserver = sqlitedb.get_setting('mx-host')
-    camera = sqlitedb.get_setting('rtsp-url')
+    mxserver = get_setting('mx-host')
+    camera = get_setting('rtsp-url')
     url = ''
     if "@" in camera.setting:
         if '://' in camera.setting:
@@ -210,10 +215,10 @@ def status():
             st = 0
         e = camera.setting.find("@")
         url = camera.setting[:st] + 'XXXXXXXXXX' + camera.setting[e:]
-    return render_template('status.html', mxserver=mxserver.setting, camera=url, hostip=mlUtil.get_ip_address())
+    return json.dumps({mxserver:mxserver.setting, camera:url, hostip:mlUtil.get_ip_address()})
 
 
 @app.route('/status/data')
 def status_data():
-    data = sqlitedb.get_statuses()
+    data = get_statuses()
     return jsonify(StatusEncoder().encode(data))

@@ -163,12 +163,13 @@ def get_setting(key):
     data = create_setting(setting)
     return data
 
+
 def add_child_to_parent_category(c, parent, parents):
     for p in parents:
         if p["id"] == parent:
             p["children"].append(c)
             return True
-    return false
+    return False
         
 
 def get_settings_categories():
@@ -197,7 +198,6 @@ def get_settings_categories():
         for ch in children:
             add_child_to_parent_category(ch, children,ch["parent"], parents)
     return parents
-
 
 
 def create_setting(row):
@@ -296,7 +296,6 @@ def delete_status(name):
 
 
 def get_logs():
-    delete_logs()
     db = get_db()
     cursor = db.cursor()
     rows = cursor.execute('SELECT * FROM logs ORDER BY datetime(submitted_date) DESC LIMIT 100').fetchall()
