@@ -1,7 +1,7 @@
 import requests
 import urllib3
-from .db import * as db
-import mlUtil
+from .db import *
+from .mlUtil import *
 
 
 class MxAuth(object):
@@ -11,14 +11,14 @@ class MxAuth(object):
 
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        mx_host = db.get_setting('mx-host').setting
-        mx_username = db.get_setting('mx-username').setting
-        mx_pass = db.get_setting('mx-pass').setting
-        mx_use_tls = mlUtil.to_bool(db.get_setting('mx-use-tls').setting)
+        mx_host = get_setting('mx-host').setting
+        mx_username = get_setting('mx-username').setting
+        mx_pass = get_setting('mx-pass').setting
+        mx_use_tls = to_bool(get_setting('mx-use-tls').setting)
 
         # Note: We're not using this. We'll only need this if the device complains
         #   about connecting to self-signed certs.
-        bypass_cert_validation = mlUtil.to_bool(db.get_setting('bypass-cert-validation').setting)
+        bypass_cert_validation = to_bool(get_setting('bypass-cert-validation').setting)
 
         path = "/handlers/AjaxHandler.asmx/AjaxInvocation"
         protocol = "https://" if mx_use_tls else "http://"

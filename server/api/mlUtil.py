@@ -6,10 +6,12 @@ import json
 import socket
 from datetime import datetime
 
+
 def to_bool(bool_str):
     zero_or_one = distutils.util.strtobool(bool_str)
     as_boolean = bool(zero_or_one)
     return as_boolean
+
 
 # addBoxToImage_tpu()
 # Replacement for addBoxToImage_coral and addBoxToImage_mac which handled different model return values

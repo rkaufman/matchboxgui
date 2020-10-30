@@ -5,6 +5,10 @@ from flask_cors import CORS
 from flask_jwt import JWT, jwt_required
 
 from .mx_auth import MxAuth as mx
+from .status import *
+from .status_type import *
+from .mlUtil import *
+from .status_encoder import *
 
 from .db import get_user, \
     add_user, get_db, init_db, \
@@ -85,7 +89,7 @@ def logout():
 
 
 @app.route('/setting', methods=['GET'])
-def get_setting():
+def get_setg():
     try:
         settings = get_settings()
         ret = []
@@ -190,9 +194,6 @@ def logs():
 
 @app.route('/status', methods=['GET'])
 def status():
-    #
-    # Update db for status checks:
-    #
 
     # 1.  Are we logged in to MXSERVER
     (login_success, _, _, _, _, _) = mx.login()
@@ -200,34 +201,15 @@ def status():
         update_status(Status(StatusType.SERVER, True, ''))
     else:
         update_status(Status(StatusType.SERVER, False, ''))
-
-    # 2.  Streaming: update this value elsewhere
-        # sqlitedb.update_status(Status(StatusType.STREAM, True, ''))
-
-    # 3.  Detecting: update this value elsewhere
-        # sqlitedb.update_status(Status(StatusType.FACEFIND, True, ''))
-
-    # 4.  Searching: if we have opted to search AND we are logged in, lets say
-    # we're searching
-    should_search = get_setting("should-submit-face-searches")
-    if login_success is True and should_search is True:
-        update_status(Status(StatusType.SEARCH, True, ''))
-    else:
-        update_status(Status(StatusType.SEARCH, False, ''))
-
-    # sqlitedb.delete_all_logs()
-    mxserver = get_setting('mx-host')
-    camera = get_setting('rtsp-url')
-    url = ''
-    if "@" in camera.setting:
-        if '://' in camera.setting:
-            st = camera.setting.find("://")
-            st = st + 3
-        else:
-            st = 0
-        e = camera.setting.find("@")
-        url = camera.setting[:st] + 'XXXXXXXXXX' + camera.setting[e:]
-    return json.dumps({mxserver:mxserver.setting, camera:url, hostip:mlUtil.get_ip_address()})
+    stats = get_statuses()
+    dto = []
+    for st in stats:
+        dto.append({
+            'name': st.name,
+            'status': st.status,
+            'display': st.display
+        })
+    return json.dumps(dto)
 
 
 @app.route('/status/data')

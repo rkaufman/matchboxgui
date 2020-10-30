@@ -2,12 +2,9 @@ import React from 'react';
 import {ListView} from '@progress/kendo-react-listview';
 import StatusRender from '../components/StatusRender';
 import LogRender from '../components/LogRender';
-//import {bindActionCreators} from 'redux';
-import statuses from '../statusItems.json'
+import {bindActionCreators} from 'redux';
 import './HomePage.css';
-//import { Camera } from '../components/Camera';
 import {CameraPlaceHolder} from '../components/CameraPlaceHolder';
-//import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 
 export class HomePage extends React.Component {
@@ -34,11 +31,15 @@ export class HomePage extends React.Component {
             cameraStatus: "Disconnected"
         };
     }
+    componentDidMount() {
+
+    }
+
     render() {
         return (
             <span>
                 <div className="col-md-2 status-panel full-height">
-                    <ListView data={statuses}
+                    <ListView data={this.props.statuses}
                         item={StatusRender}
                         className="lv-status vertical-center"/>
                 </div>
@@ -58,6 +59,7 @@ export class HomePage extends React.Component {
 
 const mapStateToProps = (state,ownProps)=>{
     return {
+        statuses: state.statuses,
         history: ownProps.history
     }
 }

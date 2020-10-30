@@ -262,9 +262,10 @@ def get_statuses():
 
 
 def get_status(name):
+    print(name)
     db = get_db()
     cursor = db.cursor()
-    row = cursor.execute('SELECT * FROM statuses WHERE status_name = ?', (name,)).fetchone()
+    row = cursor.execute('SELECT * FROM statuses WHERE status_name = ?', (str(name),)).fetchone()
     return Status(row['status_name'], row['status_value'], row['status_display'])
 
 
