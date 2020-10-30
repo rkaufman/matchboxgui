@@ -204,10 +204,12 @@ def status():
     stats = get_statuses()
     dto = []
     for st in stats:
+        print(st.icon)
         dto.append({
             'name': st.name,
             'status': st.status,
-            'display': st.display
+            'display': st.display,
+            'icon': st.icon
         })
     return json.dumps(dto)
 

@@ -266,7 +266,11 @@ def get_status(name):
     db = get_db()
     cursor = db.cursor()
     row = cursor.execute('SELECT * FROM statuses WHERE status_name = ?', (str(name),)).fetchone()
-    return Status(row['status_name'], row['status_value'], row['status_display'])
+    stat = Status(row['status_name'], row['status_value'], row['status_display'])
+    print(row['icon'])
+    stat.icon = row['icon']
+    print(stat.icon)
+    return stat
 
 
 def add_status(status):

@@ -3,6 +3,7 @@ class Status:
         self._name = name
         self._status = status
         self._display = display
+        self._icon = ''
 
     @property
     def name(self):
@@ -23,3 +24,10 @@ class Status:
     @display.setter
     def display(self, value):
         self._display = value
+
+    @property
+    def icon(self):
+        return self._icon
+    @icon.setter
+    def icon(self, value):
+        self._icon = value
