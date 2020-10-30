@@ -7,6 +7,7 @@ import settings from './settingsReducer';
 import {reducer as toastrReducer} from 'react-redux-toastr';
 import { routerReducer } from "react-router-redux";
 import statusReducer from "./statusReducer";
+import logReducer from "./logReducer";
 
 export default combineReducers({
     alert: alert,
@@ -16,5 +17,6 @@ export default combineReducers({
     settings: settings,
     toastr: toastrReducer,
     routing: routerReducer,
-    status: statusReducer
+    status: statusReducer,
+    log: logReducer
 })

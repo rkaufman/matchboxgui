@@ -104,9 +104,9 @@ function saveSettings() {
         });
     }
 }
-function changeDetector(id) {
+function changeDetector(id,sel) {
     return (dispatch) => {
-        return settingService.changeDetector(id).then(s => {
+        return settingService.changeDetector(id,sel).then(s => {
             if (s && s === true) {
                 dispatch(detectorChangedSuccessfully(id));
                 dispatch(toastrActions.add({

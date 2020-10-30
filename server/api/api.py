@@ -4,13 +4,18 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt import JWT, jwt_required
 
-from .mx_auth import MxAuth as mx
-from .status import *
-from .status_type import *
-from .mlUtil import *
-from .status_encoder import *
+from server.util.mx_auth import MxAuth as mx
+from server.status import *
+from server.status_type import *
+from server.util.mlUtil import *
+from server.status_encoder import *
+from server.message.queue_manager import QueueManager
+#from server.message.face_finder import FaceFinder
+from multiprocessing import Queue
+import threading
+from threading import Thread
 
-from .db import get_user, \
+from server.db.db import get_user, \
     add_user, get_db, init_db, \
     authenticate_user, get_user_by_id, \
     get_users, get_settings, get_settings_categories, \
@@ -30,6 +35,9 @@ app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
 CORS(app)
 jwt = JWT(app, authenticate_user, identity)
+
+#face_finder = FaceFinder()
+stop_gen2_event = threading.Event()
 
 x = get_db()
 if x is None:
@@ -189,7 +197,14 @@ def update_settings():
 @app.route('/logs')
 def logs():
     data = get_logs()
-    return json.dumps(data)
+    dto = []
+    for l in data:
+        dto.append({
+                "message": l['message'],
+                "date": l['submitted_date'],
+                "msgType": l['msg_type']
+            })
+    return json.dumps(dto)
 
 
 @app.route('/status', methods=['GET'])
@@ -198,10 +213,11 @@ def status():
     # 1.  Are we logged in to MXSERVER
     (login_success, _, _, _, _, _) = mx.login()
     if login_success is True:
-        update_status(Status(StatusType.SERVER, True, ''))
+        update_status(Status(StatusType.SERVER, True, '', ''))
     else:
-        update_status(Status(StatusType.SERVER, False, ''))
+        update_status(Status(StatusType.SERVER, False, '', ''))
     stats = get_statuses()
+    print(stats)
     dto = []
     for st in stats:
         print(st.icon)
@@ -218,3 +234,11 @@ def status():
 def status_data():
     data = get_statuses()
     return jsonify(StatusEncoder().encode(data))
+
+
+def run():
+    app.run()
+
+
+if __name__ == '__main__':
+    app.run()

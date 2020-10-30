@@ -1,0 +1,172 @@
+{
+"TaskName": "ProcessImages",
+"IndividualId": 0,
+"Dimensions": "0, 0",
+"Message": "[MachineName: Maple, CorrelationId: 05cc1be9-7f03-46d3-82cc-54c20371d3ca]. Found 1 faces. ",
+"ApplicationName": "MxServerFaceFinding",
+"RequestID": 31413812,
+"ActionConfig": {
+"PreProcessImages": {
+"Id": 367,
+"Key": "PreProcessImages",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.707",
+"NameSpace": "FaceFinder.Action",
+"StringValue": "false",
+"Type": "System.Boolean",
+"TypeId": 0,
+"TypedValue": false,
+"isLookup": false
+},
+"FramesPerSecond": {
+"Id": 366,
+"Key": "FramesPerSecond",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.707",
+"NameSpace": "FaceFinder.Action",
+"StringValue": "3",
+"Type": "System.Int32",
+"TypeId": 0,
+"TypedValue": 3,
+"isLookup": false
+},
+"ImageManipulations": {
+"Operations": [],
+"ConfigNameSpace": "FaceFinder.Action.ImageManipulations"
+},
+"AggressivenessMode": {
+"Id": 368,
+"Key": "AggressivenessMode",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.707",
+"NameSpace": "FaceFinder.Action",
+"StringValue": "SmallestFace",
+"Type": "Core.FaceFinderAggressivenessMode",
+"TypeId": 0,
+"TypedValue": "SmallestFace",
+"isLookup": true
+},
+"VideoConfig": {},
+"ImageConfig": {},
+"FrameConfig": {},
+"ConfigNameSpace": "FaceFinder.Action"
+},
+"FabricConfig": {
+"MaxVideoProcessors": {
+"Id": 382,
+"Key": "MaxVideoProcessors",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.71",
+"NameSpace": "FaceFinder.Fabric",
+"StringValue": "3",
+"Type": "System.Int32",
+"TypeId": 0,
+"TypedValue": 3,
+"isLookup": false
+},
+"MaxFaceFinders": {
+"Id": 383,
+"Key": "MaxFaceFinders",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.713",
+"NameSpace": "FaceFinder.Fabric",
+"StringValue": "4",
+"Type": "System.Int32",
+"TypeId": 0,
+"TypedValue": 4,
+"isLookup": false
+},
+"SyncVideoProcessing": {
+"Id": 384,
+"Key": "SyncVideoProcessing",
+"ModifiedBy": "OriginalEntry",
+"ModifiedDate": "2019-08-03T14:20:21.713",
+"NameSpace": "FaceFinder.Fabric",
+"StringValue": "false",
+"Type": "System.Boolean",
+"TypeId": 0,
+"TypedValue": false,
+"isLookup": false
+},
+"LoggerDestinations": [
+{}
+],
+"LogLevel": {
+"Id": 385,
+"Key": "LogLevel",
+"ModifiedBy": "Update for Serilog",
+"ModifiedDate": "2019-08-03T14:20:24.833",
+"NameSpace": "FaceFinder.Fabric",
+"StringValue": "3",
+"Type": "System.Int32",
+"TypeId": 0,
+"TypedValue": 3,
+"isLookup": false
+},
+"LogTargets": [
+{
+"Address": "239.255.0.1",
+"Port": 4000,
+"Level": 3
+}
+],
+"ConfigNameSpace": "FaceFinder.Fabric"
+},
+"ActionId": 1,
+"EnqueueTimeTicks": 637219511583664239,
+"Faces": [
+{
+"FoundFace": {
+"Frame": 0,
+"Head": "110, 0, 904, 1117",
+"LeftEye": "305, 516",
+"RightEye": "512, 486",
+"Confidence": 6.620735,
+"ParentID": 10360,
+"Identifier": 1,
+"Rotation": {
+"Profile": 0,
+"Yaw": -0.8716017603874207,
+"Roll": 8.590935707092286,
+"Pitch": 0.0
+},
+"Score": 24.626516342163087,
+"OffsetMilliseconds": 0,
+"URI": "\\\\localhost\\MXSERVER\\Temp\\faceFinder\\10360_awi43j5f\\0\\010360_faces_0001.png",
+"Pose": null
+},
+"Frame": 0,
+"ImageLocation": "\\\\localhost\\MXSERVER\\Temp\\faceFinder\\10360_awi43j5f\\0\\010360_faces_0001.png",
+"Head": "110, 0, 904, 1117",
+"LeftEye": "305, 516",
+"RightEye": "512, 486",
+"Confidence": 6.620735,
+"ParentID": 10360,
+"Identifier": 1,
+"Rotation": {
+"Profile": 0,
+"Yaw": -0.8716017603874207,
+"Roll": 8.590935707092286,
+"Pitch": 0.0
+},
+"Score": 24.626516342163087,
+"OffsetMilliseconds": 0,
+"URI": "\\\\localhost\\MXSERVER\\Temp\\faceFinder\\10360_awi43j5f\\0\\010360_faces_0001.png",
+"Pose": null
+}
+],
+"OutputDirectory": "\\\\localhost\\MXSERVER\\Temp\\faceFinder\\10360_awi43j5f\\0",
+"ConfigName": null,
+"ImageOperations": [],
+"Assets": [
+{
+"AssetId": 10360,
+"Uri": "\\\\localhost\\MXSERVER\\Repository\\Media\\2020\\04-08\\13-50\\10360_d23cb146b70d4489972c5d9fbe479742.jpg",
+"ParentAssetID": 0,
+"Checksum": null,
+"ExternalMetadata": null
+}
+],
+"FaceFinderMode": 46,
+"NeedRestart": false
+}

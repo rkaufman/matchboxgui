@@ -64,9 +64,8 @@ export default function settings(state = { settings: [], categories: [], detecto
                     return produce(state,
                         draft => {
                             draft.detectors.forEach(d => {
-                                d.selected = false;
                                 if (d.id === action.id) {
-                                    d.selected = true;
+                                    d.selected = !d.selected;
                                 }
                             });
                         });

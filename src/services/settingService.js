@@ -43,12 +43,12 @@ const getDetectors = () => {
             return d;
         });
 }
-const changeDetector = (id) => {
+const changeDetector = (id,selected) => {
     let opts = {
         method: 'PATCH',
         headers: authHeader()
     };
-    return fetch(`${config.apiUrl}/setting/detectors/${id}`, opts)
+    return fetch(`${config.apiUrl}/setting/detectors/${id}?selected=${selected}`, opts)
         .then(serviceBase.handleResponse)
         .then((s) => {
             if (s.status === 'success') {

@@ -10,12 +10,12 @@ const getStatuses = ()=>{
     return (dispatch)=>{
         return statusService.getAll().then(s=>{
             dispatch(getStatusesSuccess(s));
-        }).catch(e=>{
+        }).catch(e=> {
             toastrActions.add({
                 type: 'error',
                 message: 'Failed to get statuses.',
                 title: 'Error'
-            })
+            });
         });
     }
 }
