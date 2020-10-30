@@ -4,12 +4,12 @@ import StatusRender from '../components/StatusRender';
 import LogRender from '../components/LogRender';
 import {bindActionCreators} from 'redux';
 import './HomePage.css';
-import {CameraPlaceHolder} from '../components/CameraPlaceHolder';
-import Camera from '../components/Camera';
+import CameraPlaceHolder from '../components/CameraPlaceHolder';
 import { connect } from 'react-redux';
 import {statusActions} from "../actions/statusActions";
 import { logActions } from "../actions";
 import { Pager }from '@progress/kendo-react-data-tools';
+import { settingActions } from "../actions";
 
 export class HomePage extends React.Component {
     constructor(props) {
@@ -24,6 +24,7 @@ export class HomePage extends React.Component {
     componentDidMount() {
         this.props.statActions.getStatuses();
         this.props.lgActions.getLogs();
+        this.props.setActions.getSettings();
     }
     handlePageChange = (e) => {
       this.setState({
@@ -33,6 +34,7 @@ export class HomePage extends React.Component {
     }
 
     render() {
+        let cameraStatus = this.props.statuses.filter(s => s.name === "StatusType.STREAM");
         return (
             <span>
                 <div className="col-md-2 status-panel full-height">
@@ -48,8 +50,7 @@ export class HomePage extends React.Component {
                     <Pager skip={this.state.skip} take={this.state.take} onPageChange={this.handlePageChange} total={this.props.logs.length}/>
                 </div>
                 <div className="col-md-6  status-panel full-height">
-                    <CameraPlaceHolder className="camera-placeholder" status={this.state.cameraStatus}/>
-                    <Camera hidden/>
+                    <CameraPlaceHolder className="camera-placeholder" status={cameraStatus.length > 0 ? cameraStatus.status : false}/>
                 </div>
             </span>
         );
@@ -66,7 +67,8 @@ const mapStateToProps = (state,ownProps)=>{
 const mapDispatchToProps = (dispatch)=>{
     return{
         statActions: bindActionCreators(statusActions, dispatch),
-        lgActions: bindActionCreators(logActions, dispatch)
+        lgActions: bindActionCreators(logActions, dispatch),
+        setActions: bindActionCreators(settingActions, dispatch)
     }
 }
 
