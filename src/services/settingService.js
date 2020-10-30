@@ -1,6 +1,6 @@
 import config from './config';
 import { authHeader } from '../helpers';
-import history from "../helpers/history";
+import { serviceBase } from './serviceBase';
 
 
 function getAll(){
@@ -9,7 +9,7 @@ function getAll(){
         headers: authHeader()
     };
     return fetch(`${config.apiUrl}/setting`, requestOptions)
-        .then(handleResponse)
+        .then(serviceBase.handleResponse)
         .then(s => {
             return s.map((w, i) => {
                  w.hasChanges = false;
@@ -23,7 +23,7 @@ function getCategories() {
         headers: authHeader()
     };
     return fetch(`${config.apiUrl}/setting/category`, requestOptions)
-        .then(handleResponse)
+        .then(serviceBase.handleResponse)
         .then(c => {
             return c.map((cat, i) => {
                 cat.hasChanges = false;
@@ -38,7 +38,7 @@ const getDetectors = () => {
         headers: authHeader()
     };
     return fetch(`${config.apiUrl}/setting/detectors`, opts)
-        .then(handleResponse)
+        .then(serviceBase.handleResponse)
         .then(d => {
             return d;
         });
@@ -49,7 +49,7 @@ const changeDetector = (id) => {
         headers: authHeader()
     };
     return fetch(`${config.apiUrl}/setting/detectors/${id}`, opts)
-        .then(handleResponse)
+        .then(serviceBase.handleResponse)
         .then((s) => {
             if (s.status === 'success') {
                 return true;
@@ -71,23 +71,7 @@ const saveSettings = (settings) => {
             return Promise.reject(r.statusText());
         });
 }
-function handleResponse(response) {
-    return response.text().then(text => {
-        const data = text && JSON.parse(text);
-        if (!response.ok) {
-            if (response.status === 401) {
-                // auto logout if 401 response returned from api
-                localStorage.removeItem("auth_token");
-                history.push('/login');
-            }
 
-            const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
-        }
-
-        return data;
-    });
-}
 export const settingService = {
     getAll,
     getCategories,

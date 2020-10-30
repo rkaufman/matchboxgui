@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import './HomePage.css';
 import {CameraPlaceHolder} from '../components/CameraPlaceHolder';
 import { connect } from 'react-redux';
+import {statusActions} from "../actions/statusActions";
 
 export class HomePage extends React.Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export class HomePage extends React.Component {
         };
     }
     componentDidMount() {
-
+        this.props.statActions.getStatuses();
     }
 
     render() {
@@ -59,9 +60,14 @@ export class HomePage extends React.Component {
 
 const mapStateToProps = (state,ownProps)=>{
     return {
-        statuses: state.statuses,
+        statuses: state.status.statuses,
         history: ownProps.history
     }
 }
+const mapDispatchToProps = (dispatch)=>{
+    return{
+        statActions: bindActionCreators(statusActions, dispatch)
+    }
+}
 
-export default connect(mapStateToProps)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
