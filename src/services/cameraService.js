@@ -1,4 +1,3 @@
-import {serviceBase} from "./serviceBase";
 import config from './config';
 import { authHeader } from '../helpers';
 
@@ -8,10 +7,10 @@ const startCamera = () => {
     headers: authHeader()
   };
   return fetch(`${config.apiUrl}/camera/start`, opt)
-    .then(serviceBase.handleResponse)
-    .then(() => {
-      return true;
-    });
+      .then((r) => {
+          if (r.ok) return true;
+          return Promise.reject(r.statusText);
+      });
 }
 
 const stopCamera = () => {
@@ -20,10 +19,10 @@ const stopCamera = () => {
     headers: authHeader()
   };
   return fetch(`${config.apiUrl}/camera/stop`, opt)
-    .then(serviceBase.handleResponse)
-    .then(() => {
-      return true;
-    });
+      .then((r) => {
+          if (r.ok) return true;
+          return Promise.reject(r.statusText);
+      });
 }
 const viewCamera = (view) => {
   let opt = {
@@ -31,9 +30,9 @@ const viewCamera = (view) => {
     headers: authHeader()
   };
   return fetch(`${config.apiUrl}/camera/view?show=${view}`, opt)
-    .then(serviceBase.handleResponse)
-    .then(() => {
-      return true;
+    .then((r) => {
+        if (r.ok) return true;
+        return Promise.reject(r.statusText);
     });
 }
 

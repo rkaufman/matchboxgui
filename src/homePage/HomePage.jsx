@@ -19,12 +19,12 @@ export class HomePage extends React.Component {
             cameraStatus: "Disconnected",
             skip: 0,
             take: 5,
-            statusTimeout:setInterval(()=>{
-                this.props.statActions.getStatuses();
-            }, 30000),
-            logTimeout: setInterval(()=>{
-                this.props.lgActions.getLogs();
-            }, 5000)
+            //statusTimeout:setInterval(()=>{
+            //    this.props.statActions.getStatuses();
+            //}, 30000),
+            //logTimeout: setInterval(()=>{
+            //    this.props.lgActions.getLogs();
+            //}, 5000)
         };
     }
     componentDidMount() {

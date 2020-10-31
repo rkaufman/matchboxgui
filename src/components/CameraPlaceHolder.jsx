@@ -21,9 +21,13 @@ export class CameraPlaceHolder extends React.Component{
         this.cancelCameraSourceUpdate = this.cancelCameraSourceUpdate.bind(this);
         this.viewCamera = this.viewCamera.bind(this);
         this.startCamera = this. startCamera.bind(this);
+        this.stopCamera = this.stopCamera.bind(this);
     }
     startCamera(){
         this.props.camActions.startCamera();
+    }
+    stopCamera() {
+        this.props.camActions.stopCamera();
     }
     toggleCameraSourceDialog(){
 
@@ -51,11 +55,6 @@ export class CameraPlaceHolder extends React.Component{
         this.props.camActions.viewCamera(!this.props.camView);
     }
     render() {
-        if(this.props.cameraSource !== '' && this.state.cameraSource === ''){
-            this.setState({
-                cameraSource: JSON.parse(JSON.stringify(this.props.cameraSource))
-            });
-        }
         return(<span>
                    <div className="camera-placeholder" hidden={this.props.camView}>
                        <div className="vertical-center">
@@ -68,7 +67,7 @@ export class CameraPlaceHolder extends React.Component{
                            }</p>
                            <Button onClick={this.viewCamera}>View Camera</Button>
                        </div>
-                        <Camera hidden={!this.props.camView}/>
+                       <Camera hidden={!this.props.camView}/>
                    </div>
                    <Toolbar className="camera-placeholder-toolbar">
                        <ToolbarItem>
@@ -85,8 +84,9 @@ export class CameraPlaceHolder extends React.Component{
                        </ToolbarItem>
                        <ToolbarSpacer/>
                        <ToolbarItem>
-                           <Button onClick={this.startCamera}>Start Camera</Button>
-                           <Button onClick={this.toggleCameraSourceDialog}>Set Camera URI</Button>
+                            <Button onClick={this.startCamera} disabled={this.props.status}>Start Camera</Button>
+                            <Button onClick={this.stopCamera} disabled={!this.props.status}>Stop Camera</Button>
+                            
                        </ToolbarItem>
                    </Toolbar>
                    {this.state.cameraSourceWindowVisible &&
@@ -102,7 +102,7 @@ export class CameraPlaceHolder extends React.Component{
                                    <label className="k-form-field">
                                        <span>URI</span>
                                        <input className="k-textbox" placeholder="rtsp://tygart.com/camera" onChange={
-this.updateCameraSource} value={this.props.cameraUri}/>
+this.updateCameraSource} value={this.state.cameraSource}/>
                                    </label>
                                </fieldset>
                                <div className="text-right">
