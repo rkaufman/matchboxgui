@@ -18,7 +18,13 @@ export class HomePage extends React.Component {
         this.state = {
             cameraStatus: "Disconnected",
             skip: 0,
-            take: 5
+            take: 5,
+            statusTimeout:setInterval(()=>{
+                this.props.statActions.getStatuses();
+            }, 30000),
+            logTimeout: setInterval(()=>{
+                this.props.lgActions.getLogs();
+            }, 5000)
         };
     }
     componentDidMount() {
@@ -26,13 +32,21 @@ export class HomePage extends React.Component {
         this.props.lgActions.getLogs();
         this.props.setActions.getSettings();
     }
+    componentWillUnmount() {
+        if(this.state.logTimeout){
+            clearInterval(this.state.logTimeout);
+        }
+        if(this.state.statusTimeout){
+            clearInterval(this.state.statusTimeout);
+        }
+    }
+
     handlePageChange = (e) => {
       this.setState({
         skip: e.skip,
         take: e.take
       });
     }
-
     render() {
         let cameraStatus = this.props.statuses.filter(s => s.name === "StatusType.STREAM");
         return (

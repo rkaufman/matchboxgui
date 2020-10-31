@@ -8,6 +8,7 @@ import {reducer as toastrReducer} from 'react-redux-toastr';
 import { routerReducer } from "react-router-redux";
 import statusReducer from "./statusReducer";
 import logReducer from "./logReducer";
+import cameraReducer from "./cameraReducer";
 
 export default combineReducers({
     alert: alert,
@@ -18,5 +19,6 @@ export default combineReducers({
     toastr: toastrReducer,
     routing: routerReducer,
     status: statusReducer,
-    log: logReducer
+    log: logReducer,
+    camera: cameraReducer
 })

@@ -3,13 +3,16 @@ import { Button, Toolbar, ToolbarItem, ToolbarSpacer } from '@progress/kendo-rea
 import { Window } from '@progress/kendo-react-dialogs';
 import { connect } from 'react-redux';
 import Camera from './Camera';
+import {bindActionCreators} from "redux";
+import cameraActions from "../actions/cameraActions";
 
 export class CameraPlaceHolder extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {
             hidden:false,
-            cameraSource: '',
+            cameraSource: JSON.parse(JSON.stringify(props.cameraSource)),
             previousCameraSource: "",
             cameraSourceWindowVisible: false
         }
@@ -17,7 +20,11 @@ export class CameraPlaceHolder extends React.Component{
         this.toggleCameraSourceDialog = this.toggleCameraSourceDialog.bind(this);
         this.cancelCameraSourceUpdate = this.cancelCameraSourceUpdate.bind(this);
     }
+    startCamera(){
+        this.props.camActions.start();
+    }
     toggleCameraSourceDialog(){
+
         if(!this.state.cameraSourceWindowVisible){
             this.setState({
             previousCameraSource: this.state.cameraSource});
@@ -38,9 +45,17 @@ export class CameraPlaceHolder extends React.Component{
             cameraSource: e.target.value
         });
     }
+    viewCamera(){
+        this.props.camActions.viewCamera(!this.props.camView);
+    }
     render() {
+        if(this.props.cameraSource !== '' && this.state.cameraSource === ''){
+            this.setState({
+                cameraSource: JSON.parse(JSON.stringify(this.props.cameraSource))
+            });
+        }
         return(<span>
-                   <div className="camera-placeholder" hidden={this.state.hidden}>
+                   <div className="camera-placeholder" hidden={this.props.camView}>
                        <div className="vertical-center">
                            <div>
                                <i className="fa fa-video-camera fa-5x"/>
@@ -49,9 +64,9 @@ export class CameraPlaceHolder extends React.Component{
                            <p style={{ color: this.props.status === false ? 'red' : 'green' }}>{this.props
                                .status === false ? 'Disconnected':'Connected'
                            }</p>
-                           <Button >View Camera</Button>
+                           <Button onClick={this.viewCamera}>View Camera</Button>
                        </div>
-                        <Camera hidden={!this.state.cameraSourceWindowVisible}/>
+                        <Camera hidden={!this.props.camView}/>
                    </div>
                    <Toolbar className="camera-placeholder-toolbar">
                        <ToolbarItem>
@@ -68,7 +83,8 @@ export class CameraPlaceHolder extends React.Component{
                        </ToolbarItem>
                        <ToolbarSpacer/>
                        <ToolbarItem>
-                           <Button onClick={this.toggleCameraSourceDialog}>Connect/Start Camera</Button>
+                           <Button onClick={this.startCamera}>Start Camera</Button>
+                           <Button onClick={this.toggleCameraSourceDialog}>Set Camera URI</Button>
                        </ToolbarItem>
                    </Toolbar>
                    {this.state.cameraSourceWindowVisible &&
@@ -91,7 +107,7 @@ this.updateCameraSource} value={this.props.cameraUri}/>
                                    <button type="button" className="k-button" onClick={this.cancelCameraSourceUpdate
 }>Cancel</button>
                                    <button type="button" className="k-button" onClick={this.toggleCameraSourceDialog
-}>Submit</button>
+}>Save &amp; Start</button>
                                </div>
                            </form>
                        </Window>
@@ -105,8 +121,13 @@ const mapStateToProps = (state,ownProps)=> {
     return{
         cameraSource: camUri.length > 0 ? camUri[0].setting : '',
         class: ownProps.className,
-        status: camStatus.length > 0 ? (camStatus[0].status === 'true') : false
-
+        status: camStatus.length > 0 ? (camStatus[0].status === 'true') : false,
+        camView: state.camera.viewStarted
+    }
 }
+const mapDispatchToActions = (dispatch)=>{
+    return {
+        camActions: bindActionCreators(cameraActions,dispatch)
+    }
 }
-export default connect(mapStateToProps)(CameraPlaceHolder);
+export default connect(mapStateToProps, mapDispatchToActions)(CameraPlaceHolder);
