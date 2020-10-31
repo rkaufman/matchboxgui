@@ -14,7 +14,8 @@ export class CameraPlaceHolder extends React.Component{
             hidden:false,
             cameraSource: JSON.parse(JSON.stringify(props.cameraSource)),
             previousCameraSource: "",
-            cameraSourceWindowVisible: false
+            cameraSourceWindowVisible: false,
+            vidSrc: '#'
         }
         this.updateCameraSource = this.updateCameraSource.bind(this);
         this.toggleCameraSourceDialog = this.toggleCameraSourceDialog.bind(this);
@@ -67,7 +68,7 @@ export class CameraPlaceHolder extends React.Component{
                            }</p>
                            <Button onClick={this.viewCamera}>View Camera</Button>
                        </div>
-                       <Camera hidden={!this.props.camView}/>
+                       <Camera hidden={!this.props.camView} vidSrc={this.state.vidSrc}/>
                    </div>
                    <Toolbar className="camera-placeholder-toolbar">
                        <ToolbarItem>
@@ -77,15 +78,15 @@ export class CameraPlaceHolder extends React.Component{
                        </ToolbarItem>
                        <ToolbarItem>
                            <p style={{ color: 'white', fontWeight: 'bold' }}>Video Source: <span style={{
-                                color: this.state.cameraSource === '' ? 'red' : 'Green'
-                            }}>{this.state.cameraSource === ''
+                                color: this.props.cameraSource === '' ? 'red' : 'Green'
+                            }}>{this.props.cameraSource === ''
                                 ? 'No camera uri found.'
-                                : this.state.cameraSource}</span></p>
+                                : this.props.cameraSource}</span></p>
                        </ToolbarItem>
                        <ToolbarSpacer/>
                        <ToolbarItem>
-                            <Button onClick={this.startCamera} disabled={this.props.status}>Start Camera</Button>
-                            <Button onClick={this.stopCamera} disabled={!this.props.status}>Stop Camera</Button>
+                            <Button onClick={this.startCamera} disabled={this.props.camStarted}>Start Camera</Button>
+                            <Button onClick={this.stopCamera} disabled={!this.props.camStarted}>Stop Camera</Button>
                             
                        </ToolbarItem>
                    </Toolbar>
@@ -124,6 +125,7 @@ const mapStateToProps = (state,ownProps)=> {
         cameraSource: camUri.length > 0 ? camUri[0].setting : '',
         class: ownProps.className,
         status: camStatus.length > 0 ? (camStatus[0].status === 'true') : false,
+        camStarted: state.camera.started,
         camView: state.camera.viewStarted
     }
 }
