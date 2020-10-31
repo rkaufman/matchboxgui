@@ -28,7 +28,7 @@ export class Settings extends React.Component {
 
     onSelect = (e) => {
         let settings = [];
-        this.props.settings.map((x) => { if(parseInt(x.group) === e.itemTarget.props.id)settings.push(x);} );
+        this.props.settings.forEach((x) => { if(parseInt(x.group) === e.itemTarget.props.id)settings.push(x);} );
         this.setState({
             selectedSettings: settings
         });

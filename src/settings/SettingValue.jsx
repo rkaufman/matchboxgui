@@ -12,7 +12,7 @@ export class SettingValue extends React.Component {
         }
     }
     change = (e) => {
-        let stgId = e.target.element && e.target.element.type == 'checkbox' ? parseInt(e.target.element.id) : parseInt(e.target.props.id);
+        let stgId = e.target.element && e.target.element.type === 'checkbox' ? parseInt(e.target.element.id) : parseInt(e.target.props.id);
         let original = this.props.settings.find(s => s.id === stgId);
         let next = JSON.parse(JSON.stringify(original));
         if (original.controlType.name === 'checkbox') {

@@ -1,6 +1,5 @@
 import React from 'react';
 import LogStatusIndicator from './LogStatusIndicator';
-import Datetime from 'react-datetime';
 
 
 const StatusRender = (props)=>{

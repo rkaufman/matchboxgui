@@ -54,7 +54,7 @@ export class InputSelector extends React.Component {
     }
 
     render() {
-        if (this.props.controlType == undefined) return <span />;
+        if (this.props.controlType === undefined) return <span />;
         let input = null;
         let videoInputModes = [
             { text: 'Onboard', id: 1 },
@@ -65,7 +65,7 @@ export class InputSelector extends React.Component {
         switch (this.props.controlType.name) {
             case 'checkbox':
                 input =
-                    <Checkbox checked={this.props.setting.toLowerCase() == 'true'} id={
+                    <Checkbox checked={this.props.setting.toLowerCase() === 'true'} id={
                         this.props.id.toString()} onChange={this.props.settingChanged} />;
                 break;
             case 'ddl':

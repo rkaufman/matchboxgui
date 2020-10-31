@@ -2,7 +2,7 @@ import React from 'react';
 import { Toolbar, ToolbarItem, Button, ToolbarSpacer } from '@progress/kendo-react-buttons'
 import { Splitter } from '@progress/kendo-react-layout';
 import { Form, Field, FormElement } from '@progress/kendo-react-form';
-import { Input, Checkbox } from '@progress/kendo-react-inputs';
+import { Input } from '@progress/kendo-react-inputs';
 
 export class NetworkConfiguration extends React.Component {
     constructor(props) {

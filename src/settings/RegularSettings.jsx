@@ -27,7 +27,7 @@ export class RegularSettings extends React.Component{
     }
     filterSettings = () => {
         let filt = [];
-        this.props.settings.map(s => { if (parseInt(s.group) === this.props.categoryId) filt.push(s); });
+        this.props.settings.forEach(s => { if (parseInt(s.group) === this.props.categoryId) filt.push(s); });
         return filt;
     }
         

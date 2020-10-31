@@ -91,7 +91,11 @@ function saveSettings() {
                     title: 'Successfully Saved'
                 }));
             } else {
-                throw 'Failed to save settings';
+                dispatch(toastrActions.add({
+                    type: 'error',
+                    message: 'Failed to save Settings',
+                    title: 'Error'
+                }));
             }
             
         }).catch(e => {
