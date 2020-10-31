@@ -19,7 +19,7 @@ const startCamera = ()=>{
     return (dispatch)=>{
         return cameraService.startCamera()
             .then(r=>{
-                if (r.ok) {
+                if (r===true) {
                     dispatch(startCameraSuccess());
                 } else {
                     toastrActions.add({
@@ -36,7 +36,7 @@ const stopCamera = ()=>{
     return (dispatch)=> {
         return cameraService.stopCamera()
             .then((r) => {
-                if (r.ok) {
+                if (r) {
                     dispatch(stopCameraSuccess());
                 }else {
                     toastrActions.add({
@@ -52,7 +52,7 @@ const viewCamera = (view)=>{
     return (dispatch)=> {
         return cameraService.viewCamera(view)
             .then((r) => {
-                if (r.ok) {
+                if (r) {
                     if (view === true) {
                         dispatch(viewCameraStartSuccess());
                     } else {
