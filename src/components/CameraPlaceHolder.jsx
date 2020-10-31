@@ -19,9 +19,11 @@ export class CameraPlaceHolder extends React.Component{
         this.updateCameraSource = this.updateCameraSource.bind(this);
         this.toggleCameraSourceDialog = this.toggleCameraSourceDialog.bind(this);
         this.cancelCameraSourceUpdate = this.cancelCameraSourceUpdate.bind(this);
+        this.viewCamera = this.viewCamera.bind(this);
+        this.startCamera = this. startCamera.bind(this);
     }
     startCamera(){
-        this.props.camActions.start();
+        this.props.camActions.startCamera();
     }
     toggleCameraSourceDialog(){
 
