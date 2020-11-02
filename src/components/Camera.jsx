@@ -5,7 +5,7 @@ export class Camera extends React.Component{
     render() {
         return(
             <div>
-                <img src={this.props.vidSrc} id="vid" className="video-view-portal"/>
+                <img src={this.props.vidSrc} id="vid" className="video-view-portal" />
             </div>
         );
     }
